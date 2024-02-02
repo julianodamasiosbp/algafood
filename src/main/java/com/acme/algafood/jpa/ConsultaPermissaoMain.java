@@ -8,21 +8,21 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
 import com.acme.algafood.AlgafoodApiApplication;
-import com.acme.algafood.domain.model.FormaPagamento;
-import com.acme.algafood.domain.repository.FormaPagamentoRepository;
+import com.acme.algafood.domain.model.Permissao;
+import com.acme.algafood.domain.repository.PermissaoRepository;
 
 @SpringBootApplication
-public class ConsultaFormaPagamentoMain {
+public class ConsultaPermissaoMain {
 	public static void main(String[] args) {
 		ApplicationContext applicationContext = new SpringApplicationBuilder(AlgafoodApiApplication.class)
 				.web(WebApplicationType.NONE).run(args);
 
-		FormaPagamentoRepository formaPagamentoRepository = applicationContext.getBean(FormaPagamentoRepository.class);
+		PermissaoRepository permissaoRepository = applicationContext.getBean(PermissaoRepository.class);
 
-		List<FormaPagamento> formaPagamentos = formaPagamentoRepository.listar();
+		List<Permissao> permissoes = permissaoRepository.listar();
 
-		for (FormaPagamento formaPagamento : formaPagamentos) {
-			System.out.println(formaPagamento.getDescricao());
+		for (Permissao permissao : permissoes) {
+			System.out.printf("%s - %s\n", permissao.getNome() ,permissao.getDescricao());
 		}
 
 	}

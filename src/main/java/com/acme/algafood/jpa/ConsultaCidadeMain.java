@@ -8,21 +8,21 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
 import com.acme.algafood.AlgafoodApiApplication;
-import com.acme.algafood.domain.model.FormaPagamento;
-import com.acme.algafood.domain.repository.FormaPagamentoRepository;
+import com.acme.algafood.domain.model.Cidade;
+import com.acme.algafood.domain.repository.CidadeRepository;
 
 @SpringBootApplication
-public class ConsultaFormaPagamentoMain {
+public class ConsultaCidadeMain {
 	public static void main(String[] args) {
 		ApplicationContext applicationContext = new SpringApplicationBuilder(AlgafoodApiApplication.class)
 				.web(WebApplicationType.NONE).run(args);
 
-		FormaPagamentoRepository formaPagamentoRepository = applicationContext.getBean(FormaPagamentoRepository.class);
+		CidadeRepository cidadeRepository = applicationContext.getBean(CidadeRepository.class);
 
-		List<FormaPagamento> formaPagamentos = formaPagamentoRepository.listar();
+		List<Cidade> cidades = cidadeRepository.listar();
 
-		for (FormaPagamento formaPagamento : formaPagamentos) {
-			System.out.println(formaPagamento.getDescricao());
+		for (Cidade cidade : cidades) {
+			System.out.printf("%s - %s\n", cidade.getNome(), cidade.getEstado().getNome());
 		}
 
 	}

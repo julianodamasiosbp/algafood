@@ -13,5 +13,22 @@ insert into restaurante (nome, taxa_frete, cozinha_id) values ('Comeu Morreu', 5
 
 #FormaPagamento
 
-insert into forma_pagamento (nome) values ('Credito');
-insert into forma_pagamento (nome) values ('Debito');
+insert into forma_pagamento (descricao) values ('Credito');
+insert into forma_pagamento (descricao) values ('Debito');
+
+#Permissao
+
+insert into permissao (nome, descricao) values ('administrador', 'Consegue acessar todas as funcionalidades');
+insert into permissao (nome, descricao) values ('suporte', 'Consegue acessar todas as funcionalidades, exceto financeiro');
+
+#Estado
+
+insert into estado (nome) values ('Rio Grande do Norte');
+insert into estado (nome) values ('Paraiba');
+insert into estado (nome) values ('Ceara');
+
+#Cidade
+
+insert into cidade (nome, estado_id) values ('Natal', 1);
+insert into cidade (nome, estado_id) values ('Joao Pessoa', 2);
+insert into cidade (nome, estado_id) values ('Fortaleza', 3);
