@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,6 +56,16 @@ public class CozinhaController {
 		if(cozinhaAtual != null) {
 			BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
 			return ResponseEntity.ok(cozinhaRepository.salvar(cozinhaAtual));
+		}
+		return ResponseEntity.notFound().build();
+	}
+	
+	@DeleteMapping("/{cozinhaId}")
+	public ResponseEntity<String> remover(@PathVariable Long cozinhaId) {
+		Cozinha cozinhaSalva = cozinhaRepository.buscar(cozinhaId);
+		if(cozinhaSalva != null) {
+			cozinhaRepository.remover(cozinhaSalva);
+			return ResponseEntity.noContent().build();
 		}
 		return ResponseEntity.notFound().build();
 	}
