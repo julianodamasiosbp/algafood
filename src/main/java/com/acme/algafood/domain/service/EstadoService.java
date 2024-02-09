@@ -1,5 +1,6 @@
 package com.acme.algafood.domain.service;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,12 @@ public class EstadoService {
 					String.format("Nao existe cadastro de Estado com codigo: %d", id));
 		}
 		return estadoSalvo;
+	}
+	
+	public Estado atualizar(Long id, Estado estado) {
+		Estado estadoSalvo = buscar(id);
+		BeanUtils.copyProperties(estado, estadoSalvo, "id");
+		return this.estadoRepository.salvar(estadoSalvo);
 	}
 
 }
