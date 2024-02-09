@@ -48,4 +48,12 @@ public class CidadeService {
 		BeanUtils.copyProperties(cidade, cidadeSalva, "id");
 		return this.cidadeRepository.salvar(cidadeSalva);
 	}
+	
+	public void excluir(Long id) {
+		Cidade cidadeSalva = this.cidadeRepository.buscar(id);
+		if (cidadeSalva == null) {
+			throw new EntidadeNaoEncontradaException(String.format("Nao existe cadastro de Cidade com codigo: %d", id));
+		}
+		this.cidadeRepository.remover(cidadeSalva);
+	}
 }
