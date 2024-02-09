@@ -29,6 +29,16 @@ public class CidadeController {
 		return ResponseEntity.ok(listaCidade);
 	}
 	
+	@GetMapping("/{id}")
+	public ResponseEntity<?> buscar(@PathVariable Long id){
+		try {
+			Cidade cidade = this.cidadeService.buscar(id);
+			return ResponseEntity.ok(cidade); 			
+		} catch (EntidadeNaoEncontradaException e) {
+			return ResponseEntity.notFound().build();
+		} 
+	}
+	
 	@PostMapping
 	public ResponseEntity<?> salvar(@RequestBody Cidade cidade){
 		try {

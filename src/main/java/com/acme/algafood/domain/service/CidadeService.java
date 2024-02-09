@@ -21,6 +21,14 @@ public class CidadeService {
 	public List<Cidade> listar() {
 		return this.cidadeRepository.listar();
 	}
+	
+	public Cidade buscar(Long id) {
+		Cidade cidadeSalva = this.cidadeRepository.buscar(id);
+		if (cidadeSalva == null) {
+			throw new EntidadeNaoEncontradaException(String.format("Nao existe cadastro de Cidade com codigo: %d", id));
+		}
+		return cidadeSalva;
+	}
 
 	public Cidade salvar(Cidade cidade) {
 		try {
