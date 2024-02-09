@@ -22,5 +22,5 @@ public class EstadoController {
 	public List<Estado> listar() {
 		return estadoRepository.listar();
 	}
-
+	
 }

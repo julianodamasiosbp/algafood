@@ -21,5 +21,4 @@ public class BuscaCozinhaMain {
 		System.out.printf("A cozinha localizada com o ID %d foi: %s\n", 
 				cozinha.getId(), cozinha.getNome());
 	}
-
 }

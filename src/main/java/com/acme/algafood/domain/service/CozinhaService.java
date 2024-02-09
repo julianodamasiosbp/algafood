@@ -11,7 +11,7 @@ import com.acme.algafood.domain.model.Cozinha;
 import com.acme.algafood.domain.repository.CozinhaRepository;
 
 @Service
-public class CadastroCozinhaService {
+public class CozinhaService {
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;

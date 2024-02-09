@@ -21,7 +21,7 @@ import com.acme.algafood.domain.exception.EntidadeEmUsoException;
 import com.acme.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.acme.algafood.domain.model.Cozinha;
 import com.acme.algafood.domain.repository.CozinhaRepository;
-import com.acme.algafood.domain.service.CadastroCozinhaService;
+import com.acme.algafood.domain.service.CozinhaService;
 
 //@Controller
 //@ResponseBody
@@ -33,7 +33,7 @@ public class CozinhaController {
 	private CozinhaRepository cozinhaRepository;
 	
 	@Autowired
-	private CadastroCozinhaService cadastroCozinha;
+	private CozinhaService cozinhaService;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Cozinha> listar() {
@@ -52,7 +52,7 @@ public class CozinhaController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Cozinha adicionar(@RequestBody Cozinha cozinha) {
-		return cadastroCozinha.salvar(cozinha);
+		return cozinhaService.salvar(cozinha);
 	}
 
 	@PutMapping("/{cozinhaId}")
@@ -60,7 +60,7 @@ public class CozinhaController {
 		Cozinha cozinhaAtual = cozinhaRepository.buscar(cozinhaId);
 		if (cozinhaAtual != null) {
 			BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
-			return ResponseEntity.ok(cadastroCozinha.salvar(cozinhaAtual));
+			return ResponseEntity.ok(cozinhaService.salvar(cozinhaAtual));
 		}
 		return ResponseEntity.notFound().build();
 	}
@@ -68,7 +68,7 @@ public class CozinhaController {
 	@DeleteMapping("/{cozinhaId}")
 	public ResponseEntity<Cozinha> remover(@PathVariable Long cozinhaId) {
 		try {
-			cadastroCozinha.excluir(cozinhaId);
+			cozinhaService.excluir(cozinhaId);
 			return ResponseEntity.noContent().build();
 		} catch(EntidadeNaoEncontradaException e) {
 			return ResponseEntity.notFound().build();			
