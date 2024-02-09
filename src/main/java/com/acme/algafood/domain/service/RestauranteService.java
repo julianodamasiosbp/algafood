@@ -29,7 +29,7 @@ public class RestauranteService {
 		if (cozinha == null) {
 			throw new EntidadeNaoEncontradaException(
 					String.format("Nao existe cadastro de cozinha com codigo: %d", cozinhaId));
-			
+
 		}
 		restaurante.setCozinha(cozinha);
 		return restauranteRepository.salvar(restaurante);
@@ -47,25 +47,34 @@ public class RestauranteService {
 		}
 		return restaurante;
 	}
-	
+
 	public Restaurante atualizar(Long id, Restaurante restaurante) {
 		Restaurante restauranteSalvo = this.restauranteRepository.buscar(id);
-		if(restauranteSalvo == null) {
+		if (restauranteSalvo == null) {
 			throw new EntidadeNaoEncontradaException(
-					String.format("Nao existe cadastro de restaurante com codigo: %d", id)); 
+					String.format("Nao existe cadastro de restaurante com codigo: %d", id));
 		}
-		if(!Objects.equals(restaurante.getCozinha().getId(), restauranteSalvo.getCozinha().getId())) {
+		if (!Objects.equals(restaurante.getCozinha().getId(), restauranteSalvo.getCozinha().getId())) {
 			Long cozinhaId = restaurante.getCozinha().getId();
 			Cozinha cozinhaSalva = this.cozinhaRepository.buscar(cozinhaId);
-			if(cozinhaSalva == null) {
+			if (cozinhaSalva == null) {
 				throw new EntidadeNaoEncontradaException(
-						String.format("Nao existe cadastro de cozinha com codigo: %d", cozinhaId)); 
+						String.format("Nao existe cadastro de cozinha com codigo: %d", cozinhaId));
 			}
 			restauranteSalvo.setCozinha(cozinhaSalva);
 			System.out.println("restauranteSalvo: " + restauranteSalvo.toString());
 		}
-		
+
 		BeanUtils.copyProperties(restaurante, restauranteSalvo, "id", "cozinha");
 		return restauranteRepository.salvar(restauranteSalvo);
+	}
+
+	public void excluir(Long id) {
+		Restaurante restauranteSalvo = this.restauranteRepository.buscar(id);
+		if (restauranteSalvo == null) {
+			throw new EntidadeNaoEncontradaException(
+					String.format("Nao existe cadastro de restaurante com codigo: %d", id));
+		}
+		this.restauranteRepository.remover(restauranteSalvo);
 	}
 }
