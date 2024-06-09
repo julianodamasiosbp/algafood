@@ -20,7 +20,7 @@ public class InclusaoCozinhaMain {
 		
 		Cozinha cozinha = new Cozinha();
 		cozinha.setNome("Brasileira");
-		Cozinha cozinhaSalva = cozinhaRepository.salvar(cozinha);
+		Cozinha cozinhaSalva = cozinhaRepository.save(cozinha);
 		System.out.printf("%d - %s\n", cozinhaSalva.getId(), cozinhaSalva.getNome());
 	}
 
