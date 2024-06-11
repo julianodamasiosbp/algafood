@@ -1,6 +1,7 @@
 package com.acme.algafood.domain.service;
 
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,27 +21,27 @@ public class EstadoService {
 	private EstadoRepository estadoRepository;
 	
 	public Estado salvar(Estado estado) {
-		return this.estadoRepository.salvar(estado);
+		return this.estadoRepository.save(estado);
 	}
 	
 	public Estado buscar(Long id) {
-		Estado estadoSalvo = this.estadoRepository.buscar(id);
-		if(estadoSalvo == null) {
+		Optional<Estado> estadoSalvo = this.estadoRepository.findById(id);
+		if(estadoSalvo.isEmpty()) {
 			throw new EntidadeNaoEncontradaException(
 					String.format("Nao existe cadastro de Estado com codigo: %d", id));
 		}
-		return estadoSalvo;
+		return estadoSalvo.get();
 	}
 	
 	public Estado atualizar(Long id, Estado estado) {
 		Estado estadoSalvo = buscar(id);
 		BeanUtils.copyProperties(estado, estadoSalvo, "id");
-		return this.estadoRepository.salvar(estadoSalvo);
+		return this.estadoRepository.save(estadoSalvo);
 	}
 	
 	public void excluir(Long id) {
 		try {
-			estadoRepository.remover(id);
+			estadoRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(
 					String.format("Nao existe um cadastro de estado com codigo: %d", id));
