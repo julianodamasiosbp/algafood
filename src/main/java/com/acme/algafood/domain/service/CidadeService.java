@@ -1,6 +1,7 @@
 package com.acme.algafood.domain.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -19,21 +20,20 @@ public class CidadeService {
 	private CidadeRepository cidadeRepository;
 
 	public List<Cidade> listar() {
-		return this.cidadeRepository.listar();
+		return this.cidadeRepository.findAll();
 	}
 	
 	public Cidade buscar(Long id) {
-		Cidade cidadeSalva = this.cidadeRepository.buscar(id);
-		if (cidadeSalva == null) {
+		Optional<Cidade> cidadeSalva = this.cidadeRepository.findById(id);
+		if (cidadeSalva.isEmpty()) {
 			throw new EntidadeNaoEncontradaException(String.format("Nao existe cadastro de Cidade com codigo: %d", id));
 		}
-		return cidadeSalva;
+		return cidadeSalva.get();
 	}
 
 	public Cidade salvar(Cidade cidade) {
 		try {
-			Cidade cidadeSalva = this.cidadeRepository.salvar(cidade);
-			return cidadeSalva;
+			return this.cidadeRepository.save(cidade);
 		} catch (EntityNotFoundException e) {
 			throw new EntidadeNaoEncontradaException(
 					String.format("Nao existe cadastro de Estado com codigo: %d", cidade.getEstado().getId()));
@@ -41,19 +41,19 @@ public class CidadeService {
 	}
 
 	public Cidade atualizar(Long id, Cidade cidade) {
-		Cidade cidadeSalva = this.cidadeRepository.buscar(id);
-		if (cidadeSalva == null) {
+		Optional<Cidade> cidadeSalva = this.cidadeRepository.findById(id);
+		if (cidadeSalva.isEmpty()) {
 			throw new EntidadeNaoEncontradaException(String.format("Nao existe cadastro de Cidade com codigo: %d", id));
 		}
-		BeanUtils.copyProperties(cidade, cidadeSalva, "id");
-		return this.cidadeRepository.salvar(cidadeSalva);
+		BeanUtils.copyProperties(cidade, cidadeSalva.get(), "id");
+		return this.cidadeRepository.save(cidadeSalva.get());
 	}
 	
 	public void excluir(Long id) {
-		Cidade cidadeSalva = this.cidadeRepository.buscar(id);
-		if (cidadeSalva == null) {
+		Optional<Cidade> cidadeSalva = this.cidadeRepository.findById(id);
+		if (cidadeSalva.isEmpty()) {
 			throw new EntidadeNaoEncontradaException(String.format("Nao existe cadastro de Cidade com codigo: %d", id));
 		}
-		this.cidadeRepository.remover(cidadeSalva);
+		this.cidadeRepository.delete(cidadeSalva.get());
 	}
 }
