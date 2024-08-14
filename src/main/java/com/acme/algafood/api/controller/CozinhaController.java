@@ -44,12 +44,12 @@ public class CozinhaController {
 	@GetMapping(value = "/{cozinhaId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Cozinha> buscar(@PathVariable("cozinhaId") Long cozinhaId) {
 		Optional<Cozinha> cozinha = cozinhaRepository.findById(cozinhaId);
-		if (cozinha.isPresent()) {
-			return ResponseEntity.ok(cozinha.get());
-		}
-
-		return ResponseEntity.notFound().build();
-		// return cozinha.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+//		if (cozinha.isPresent()) {
+//			return ResponseEntity.ok(cozinha.get());
+//		}
+//
+//		return ResponseEntity.notFound().build();
+		return cozinha.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
 	@PostMapping
