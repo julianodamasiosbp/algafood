@@ -77,7 +77,7 @@ public class RestauranteController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@PatchMapping("/{id}")
 	public ResponseEntity<?> atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos){
 		try {
@@ -88,14 +88,14 @@ public class RestauranteController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Restaurante restauranteOrigem = objectMapper.convertValue(dadosOrigem, Restaurante.class);
 		dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
 			Field field = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
 			field.setAccessible(true);
-			
+
 			Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
 			ReflectionUtils.setField(field, restauranteDestino, novoValor);
 		});
