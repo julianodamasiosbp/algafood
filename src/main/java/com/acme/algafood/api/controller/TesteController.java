@@ -14,6 +14,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import static com.acme.algafood.infrastructure.repository.spec.RestauranteSpecs.comFreteGratis;
+import static com.acme.algafood.infrastructure.repository.spec.RestauranteSpecs.comNomeSemelhante;
+
 @RestController
 @RequestMapping("/teste")
 public class TesteController {
@@ -65,9 +68,11 @@ public class TesteController {
     public List<Restaurante> restaurantesBuscarPorTaxaFrete(@RequestParam(required = false) String nome,
                                                             @RequestParam(required = false) BigDecimal taxaFreteInicial,
                                                             @RequestParam(required = false) BigDecimal taxaFreteFinal) {
-        System.out.println(nome);
-        System.out.println(taxaFreteInicial);
-        System.out.println(taxaFreteFinal);
         return restauranteRepository.buscar(nome, taxaFreteInicial, taxaFreteFinal);
+    }
+
+    @GetMapping("/restaurantes/com-frete-gratis")
+    public List<Restaurante> restaurantesComFreteGratis(String nome) {
+        return restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
     }
 }

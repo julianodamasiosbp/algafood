@@ -4,12 +4,18 @@
 insert into cozinha (id, nome) values (1, 'Tailandesa');
 insert into cozinha (id, nome) values (2, 'Indiana');
 insert into cozinha (id, nome) values (3, 'Brasileira');
+insert into cozinha (id, nome) values (4, 'Chinesa');
+insert into cozinha (id, nome) values (5, 'Turca');
 
 #Restaurante
 
 insert into restaurante (nome, taxa_frete, cozinha_id) values ('Camaroes', 10, 3);
 insert into restaurante (nome, taxa_frete, cozinha_id) values ('Coco Bambu', 15, 1);
 insert into restaurante (nome, taxa_frete, cozinha_id) values ('Comeu Morreu', 5, 2);
+insert into restaurante (nome, taxa_frete, cozinha_id) values ('Fogo de Chão', 0, 3);
+insert into restaurante (nome, taxa_frete, cozinha_id) values ('Thai Food', 22.87, 1);
+insert into restaurante (nome, taxa_frete, cozinha_id) values ('China in Box', 13, 4);
+insert into restaurante (nome, taxa_frete, cozinha_id) values ('Tuk Tuk', 7, 5);
 
 #FormaPagamento
 
