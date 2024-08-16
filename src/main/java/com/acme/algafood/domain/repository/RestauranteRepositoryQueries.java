@@ -9,4 +9,6 @@ public interface RestauranteRepositoryQueries {
     List<Restaurante> buscar(String nome,
                              BigDecimal taxaFreteInicial,
                              BigDecimal taxaFreteFinal);
+
+    List<Restaurante> findComFreteGratis(String nome);
 }
