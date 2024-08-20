@@ -1,6 +1,8 @@
 package com.acme.algafood.api.controller;
 
 import java.lang.reflect.Field;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.util.ReflectionUtils;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RestController
 @RequestMapping("/restaurantes")
 public class RestauranteController {
+
+	@Autowired
+	private RestauranteRepository restauranteRepository;
 
 	@Autowired
 	private RestauranteService restauranteService;
@@ -58,13 +63,26 @@ public class RestauranteController {
 		}
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
+	@PutMapping("/{restauranteId}")
+	public ResponseEntity<?> atualizar(@PathVariable Long restauranteId,
+									   @RequestBody Restaurante restaurante) {
 		try {
-			restaurante = restauranteService.atualizar(id, restaurante);
-			return ResponseEntity.ok(restaurante);
+			Restaurante restauranteAtual = restauranteRepository
+					.findById(restauranteId).orElse(null);
+
+			if (restauranteAtual != null) {
+				BeanUtils.copyProperties(restaurante, restauranteAtual,
+						"id", "formasPagamento");
+
+				restauranteAtual = restauranteService.salvar(restauranteAtual);
+				return ResponseEntity.ok(restauranteAtual);
+			}
+
+			return ResponseEntity.notFound().build();
+
 		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
+			return ResponseEntity.badRequest()
+					.body(e.getMessage());
 		}
 	}
 

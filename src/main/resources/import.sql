@@ -21,6 +21,7 @@ insert into restaurante (nome, taxa_frete, cozinha_id) values ('Tuk Tuk', 7, 5);
 
 insert into forma_pagamento (descricao) values ('Credito');
 insert into forma_pagamento (descricao) values ('Debito');
+insert into forma_pagamento (descricao) values ('Dinheiro');
 
 #Permissao
 
@@ -38,3 +39,7 @@ insert into estado (nome) values ('Ceara');
 insert into cidade (nome, estado_id) values ('Natal', 1);
 insert into cidade (nome, estado_id) values ('Joao Pessoa', 2);
 insert into cidade (nome, estado_id) values ('Fortaleza', 3);
+
+# Restaurante Forma de Pagamento
+insert into restaurante_forma_pagamento (restaurante_id, forma_pagamento_id) values (1, 1), (1, 2), (1, 3), (2, 3), (3, 2), (3, 3);
+insert into restaurante_forma_pagamento (restaurante_id, forma_pagamento_id) values (4, 1), (5, 2), (6, 3), (7, 3), (4, 2), (5, 3);
