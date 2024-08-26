@@ -80,8 +80,6 @@ create table usuario_grupo (
 ) engine=InnoDB default charset=utf8;
 
 
-
-
 alter table grupo_permissao add constraint fk_grupo_permissao_permissao
 foreign key (permissao_id) references permissao (id);
 
