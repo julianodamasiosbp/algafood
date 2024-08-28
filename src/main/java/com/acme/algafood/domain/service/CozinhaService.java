@@ -13,25 +13,36 @@ import com.acme.algafood.domain.repository.CozinhaRepository;
 @Service
 public class CozinhaService {
 
-	@Autowired
-	private CozinhaRepository cozinhaRepository;
+    public static final String MSG_COZINHA_NAO_ENCONTRADA
+            = "Não existe um cadastro de cozinha com código %d";
+    public static final String MSG_COZINHA_EM_USO
+            = "Cozinha de código %d não pode ser removida, pois está em uso";
 
-	public Cozinha salvar(Cozinha cozinha) {
-		return cozinhaRepository.save(cozinha);
-	}
+    @Autowired
+    private CozinhaRepository cozinhaRepository;
 
-	public void excluir(Long id) {
-		try {
-			if (!cozinhaRepository.existsById(id)) {
-				throw new EntidadeNaoEncontradaException(
-						String.format("Não existe um cadastro de cozinha com código %d", id));
-			}
-			cozinhaRepository.deleteById(id);
+    public Cozinha salvar(Cozinha cozinha) {
+        return cozinhaRepository.save(cozinha);
+    }
 
-		} catch (DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException(
-					String.format("Cozinha de código %d não pode ser removida, pois está em uso", id));
-		}
-	}
+    public void excluir(Long id) {
+        try {
+            if (!cozinhaRepository.existsById(id)) {
+                throw new EntidadeNaoEncontradaException(
+                        String.format(MSG_COZINHA_NAO_ENCONTRADA, id));
+            }
+            cozinhaRepository.deleteById(id);
+
+        } catch (DataIntegrityViolationException e) {
+            throw new EntidadeEmUsoException(
+                    String.format(MSG_COZINHA_EM_USO, id));
+        }
+    }
+
+    public Cozinha buscarOuFalhar(Long cozinhaId) {
+        return cozinhaRepository.findById(cozinhaId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(
+                        String.format(MSG_COZINHA_NAO_ENCONTRADA, cozinhaId)));
+    }
 
 }
