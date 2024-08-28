@@ -3,6 +3,7 @@ package com.acme.algafood.api.controller;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,24 +33,29 @@ public class EstadoController {
 
     @GetMapping("/{id}")
     public Estado buscar(@PathVariable Long id) {
-        return this.estadoService.buscarOuFalhar(id);
+        return estadoService.buscarOuFalhar(id);
     }
 
     @PostMapping
-    public ResponseEntity<?> salvar(@RequestBody Estado estado) {
-        estado = this.estadoService.salvar(estado);
-        return ResponseEntity.ok(estado);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Estado adicionar(@RequestBody Estado estado) {
+        return estadoService.salvar(estado);
     }
 
-    @PutMapping("/{id}")
-    public Estado atualizar(@PathVariable Long id, @RequestBody Estado estado) {
-        return this.estadoService.atualizar(id, estado);
+    @PutMapping("/{estadoId}")
+    public Estado atualizar(@PathVariable Long estadoId,
+                            @RequestBody Estado estado) {
+        Estado estadoAtual = estadoService.buscarOuFalhar(estadoId);
+
+        BeanUtils.copyProperties(estado, estadoAtual, "id");
+
+        return estadoService.salvar(estadoAtual);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long id) {
-        this.estadoService.excluir(id);
+        estadoService.excluir(id);
     }
 
 }
