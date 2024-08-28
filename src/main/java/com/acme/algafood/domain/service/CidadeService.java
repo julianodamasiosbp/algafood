@@ -24,36 +24,27 @@ public class CidadeService {
 	}
 	
 	public Cidade buscar(Long id) {
-		Optional<Cidade> cidadeSalva = this.cidadeRepository.findById(id);
-		if (cidadeSalva.isEmpty()) {
-			throw new EntidadeNaoEncontradaException(String.format("Nao existe cadastro de Cidade com codigo: %d", id));
-		}
-		return cidadeSalva.get();
+		return buscarOuFalhar(id);
 	}
 
 	public Cidade salvar(Cidade cidade) {
-		try {
 			return this.cidadeRepository.save(cidade);
-		} catch (EntityNotFoundException e) {
-			throw new EntidadeNaoEncontradaException(
-					String.format("Nao existe cadastro de Estado com codigo: %d", cidade.getEstado().getId()));
-		}
 	}
 
 	public Cidade atualizar(Long id, Cidade cidade) {
-		Optional<Cidade> cidadeSalva = this.cidadeRepository.findById(id);
-		if (cidadeSalva.isEmpty()) {
-			throw new EntidadeNaoEncontradaException(String.format("Nao existe cadastro de Cidade com codigo: %d", id));
-		}
-		BeanUtils.copyProperties(cidade, cidadeSalva.get(), "id");
-		return this.cidadeRepository.save(cidadeSalva.get());
+		Cidade cidadeSalva = this.buscarOuFalhar(id);
+		BeanUtils.copyProperties(cidade, cidadeSalva, "id");
+		return this.cidadeRepository.save(cidadeSalva);
 	}
 	
 	public void excluir(Long id) {
-		Optional<Cidade> cidadeSalva = this.cidadeRepository.findById(id);
-		if (cidadeSalva.isEmpty()) {
-			throw new EntidadeNaoEncontradaException(String.format("Nao existe cadastro de Cidade com codigo: %d", id));
-		}
-		this.cidadeRepository.delete(cidadeSalva.get());
+		Cidade cidadeSalva = this.buscarOuFalhar(id);
+		this.cidadeRepository.delete(cidadeSalva);
+	}
+
+	public Cidade buscarOuFalhar(Long cidadeId) {
+		return this.cidadeRepository.findById(cidadeId)
+				.orElseThrow(() -> new EntidadeNaoEncontradaException(
+						String.format("Nao existe cadastro de Cidade com codigo: %d", cidadeId)));
 	}
 }

@@ -39,17 +39,12 @@ public class RestauranteController {
 
 	@GetMapping
 	public ResponseEntity<List<Restaurante>> listar() {
-
 		return ResponseEntity.ok(restauranteService.listar());
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Restaurante> buscar(@PathVariable("id") Long id) {
-		try {
-			return ResponseEntity.ok(restauranteService.buscar(id));
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.notFound().build();
-		}
+	public Restaurante buscar(@PathVariable("id") Long id) {
+			return restauranteService.buscarOuFalhar(id);
 	}
 
 	@PostMapping
@@ -88,19 +83,15 @@ public class RestauranteController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> remover(@PathVariable Long id) {
-		try {
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void remover(@PathVariable Long id) {
 			this.restauranteService.excluir(id);
-			return ResponseEntity.noContent().build();
-		} catch (Exception e) {
-			return ResponseEntity.notFound().build();
-		}
 	}
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<?> atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos){
 		try {
-			Restaurante restauranteSalvo = restauranteService.buscar(id);
+			Restaurante restauranteSalvo = restauranteService.buscarOuFalhar(id);
 			merge(campos, restauranteSalvo);
 			return atualizar(id, restauranteSalvo);
 		} catch (EntidadeNaoEncontradaException e) {

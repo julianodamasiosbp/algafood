@@ -23,12 +23,12 @@ public class RestauranteService {
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
 
+	@Autowired
+	private CozinhaService cozinhaService;
 
     public Restaurante salvar(Restaurante restaurante) {
 		Long cozinhaId = restaurante.getCozinha().getId();
-		Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
-				.orElseThrow(() -> new EntidadeNaoEncontradaException(
-						String.format("Nao existe cadastro de cozinha com codigo: %d", cozinhaId)));
+		Cozinha cozinha = cozinhaService.buscarOuFalhar(cozinhaId);
 		restaurante.setCozinha(cozinha);
 		return restauranteRepository.save(restaurante);
 	}
@@ -38,24 +38,15 @@ public class RestauranteService {
 	}
 
 	public Restaurante buscar(Long id) {
-		Optional<Restaurante> restaurante = restauranteRepository.findById(id);
-		if (restaurante.isEmpty()) {
-			throw new EntidadeNaoEncontradaException(
-					String.format("Nao existe cadastro de restaurante com codigo: %d", id));
-		}
-		return restaurante.get();
+		return this.buscarOuFalhar(id);
 	}
 
 
 	public Restaurante atualizar(Long id, Restaurante restaurante) {
-		Restaurante restauranteSalvo = this.restauranteRepository.findById(id)
-				.orElseThrow(()-> new EntidadeNaoEncontradaException(
-						String.format("Nao existe cadastro de restaurante com codigo: %d", id)));
+		Restaurante restauranteSalvo = this.buscarOuFalhar(id);
 		if (!Objects.equals(restaurante.getCozinha().getId(), restauranteSalvo.getCozinha().getId())) {
 			Long cozinhaId = restaurante.getCozinha().getId();
-			Cozinha cozinhaSalva = this.cozinhaRepository.findById(cozinhaId)
-					.orElseThrow(() -> new EntidadeNaoEncontradaException(
-							String.format("Nao existe cadastro de cozinha com codigo: %d", cozinhaId)));
+			Cozinha cozinhaSalva = this.cozinhaService.buscarOuFalhar(cozinhaId);
 			restauranteSalvo.setCozinha(cozinhaSalva);
 			System.out.println("restauranteSalvo: " + restauranteSalvo.toString());
 		}
@@ -66,11 +57,14 @@ public class RestauranteService {
 
 
 	public void excluir(Long id) {
-		Optional<Restaurante> restauranteSalvo = this.restauranteRepository.findById(id);
-		if (restauranteSalvo.isEmpty()) {
-			throw new EntidadeNaoEncontradaException(
-					String.format("Nao existe cadastro de restaurante com codigo: %d", id));
-		}
-		this.restauranteRepository.delete(restauranteSalvo.get());
+		Restaurante restauranteSalvo = this.buscarOuFalhar(id);
+		this.restauranteRepository.delete(restauranteSalvo);
+	}
+
+	public Restaurante buscarOuFalhar(Long RestauranteId) {
+		return this.restauranteRepository
+				.findById(RestauranteId)
+				.orElseThrow(() -> new EntidadeNaoEncontradaException(
+						String.format("Nao existe cadastro de restaurante com codigo: %d", RestauranteId)));
 	}
 }
