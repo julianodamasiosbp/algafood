@@ -2,6 +2,7 @@ package com.acme.algafood.domain.service;
 
 import com.acme.algafood.domain.exception.EntidadeEmUsoException;
 import com.acme.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.acme.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.acme.algafood.domain.model.Estado;
 import com.acme.algafood.domain.repository.EstadoRepository;
 import org.springframework.beans.BeanUtils;
@@ -15,9 +16,6 @@ public class EstadoService {
 
     private static final String MSG_ESTADO_EM_USO
             = "Estado de código %d não pode ser removido, pois está em uso";
-
-    private static final String MSG_ESTADO_NAO_ENCONTRADO
-            = "Não existe um cadastro de estado com código %d";
 
     @Autowired
     private EstadoRepository estadoRepository;
@@ -41,8 +39,8 @@ public class EstadoService {
             estadoRepository.deleteById(estadoId);
 
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(
-                    String.format(MSG_ESTADO_NAO_ENCONTRADO, estadoId));
+            throw new EstadoNaoEncontradoException(
+                    estadoId);
 
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
@@ -52,8 +50,8 @@ public class EstadoService {
 
     public Estado buscarOuFalhar(Long estadoId) {
         return estadoRepository.findById(estadoId)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
-                        String.format(MSG_ESTADO_NAO_ENCONTRADO, estadoId)));
+                .orElseThrow(() -> new EstadoNaoEncontradoException(
+                        estadoId));
     }
 
 }
