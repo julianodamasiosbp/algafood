@@ -1,5 +1,6 @@
 package com.acme.algafood.api.controller;
 
+import com.acme.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.acme.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.acme.algafood.domain.exception.NegocioException;
 import com.acme.algafood.domain.model.Restaurante;
@@ -42,7 +43,7 @@ public class RestauranteController {
         try {
             return restauranteService.salvar(restaurante);
         } catch (
-                EntidadeNaoEncontradaException e) {
+                CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
     }
@@ -57,7 +58,7 @@ public class RestauranteController {
 
         try {
             return restauranteService.salvar(restauranteAtual);
-        } catch (EntidadeNaoEncontradaException e) {
+        } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
     }
