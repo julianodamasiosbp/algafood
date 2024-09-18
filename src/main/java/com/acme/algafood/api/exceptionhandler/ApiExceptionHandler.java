@@ -6,6 +6,7 @@ import com.acme.algafood.domain.exception.NegocioException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,25 +18,62 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatus status,
+                                                                  WebRequest request) {
+
+
+        ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
+
+        String detail = "O corpo da requisição está inválido. Verifique erro de sintaxe";
+
+        var problem = createProblemBuilder(status, problemType, detail).build();
+//        return super.handleHttpMessageNotReadable(ex, headers, status, request);
+        return handleExceptionInternal(
+                ex, problem, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     public ResponseEntity<?> handleEntidadeNaoEncontradoException(EntidadeNaoEncontradaException ex,
                                                                   WebRequest request) {
+
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        String detail = ex.getMessage();
+        ProblemType problemType = ProblemType.ENTIDADE_NAO_ENCONTRADA;
+
+        var problem = createProblemBuilder(status, problemType, detail).build();
         return handleExceptionInternal(
-                ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+                ex, problem, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(EntidadeEmUsoException.class)
     public ResponseEntity<?> handleEntidadeEmUsoException(EntidadeEmUsoException ex,
                                                           WebRequest request) {
+
+        HttpStatus status = HttpStatus.CONFLICT;
+        String detail = ex.getMessage();
+
+        ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
+
+        var problem = createProblemBuilder(status, problemType, detail).build();
         return handleExceptionInternal(
-                ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+                ex, problem, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
     @ExceptionHandler(NegocioException.class)
     public ResponseEntity<?> handleNegocioException(NegocioException ex,
                                                     WebRequest request) {
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String detail = ex.getMessage();
+
+        ProblemType problemType = ProblemType.ERRO_NEGOCIO;
+
+        var problem = createProblemBuilder(status, problemType, detail).build();
         return handleExceptionInternal(
-                ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+                ex, problem, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
 //    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
@@ -50,7 +88,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(
-            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+            Exception ex, @Nullable Object body, HttpHeaders headers,
+            HttpStatus status, WebRequest request) {
         if(body == null) {
             body = Problem
                     .builder()
@@ -65,6 +104,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                     .build();
         }
 
-        return new ResponseEntity<>(body, headers, status);
+        //return new ResponseEntity<>(body, headers, status);
+        return super.handleExceptionInternal(ex, body, headers, status, request);
     }
+
+    private Problem.ProblemBuilder createProblemBuilder(HttpStatus status,
+                                                        ProblemType problemType,
+                                                        String detail) {
+        return Problem.builder()
+                .status(status.value())
+                .type(problemType.getTitle())
+                .detail(detail)
+                .type(problemType.getUri());
+    }
+
 }
