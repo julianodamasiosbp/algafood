@@ -39,14 +39,8 @@ public class RestauranteController {
     }
 
     @GetMapping("/{restauranteId}")
-    public Restaurante buscar(@PathVariable Long restauranteId, HttpServletRequest request) {
-        ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
-        try {
-            return restauranteService.buscarOuFalhar(restauranteId);
-        } catch (MethodArgumentTypeMismatchException e) {
-            Throwable rootCause = ExceptionUtils.getRootCause(e);
-            throw new HttpMessageNotReadableException(e.getMessage(),rootCause, serverHttpRequest);
-        }
+    public Restaurante buscar(@PathVariable Long restauranteId) {
+        return restauranteService.buscarOuFalhar(restauranteId);
     }
 
     @PostMapping
