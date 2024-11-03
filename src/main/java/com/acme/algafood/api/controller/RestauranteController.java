@@ -1,5 +1,6 @@
 package com.acme.algafood.api.controller;
 
+import com.acme.algafood.Groups;
 import com.acme.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.acme.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.acme.algafood.domain.exception.NegocioException;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
@@ -46,7 +48,9 @@ public class RestauranteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurante adicionar(@RequestBody @Valid Restaurante restaurante) {
+    public Restaurante adicionar(@RequestBody
+                                     @Validated(Groups.CadastroRestaurante.class)
+                                     Restaurante restaurante) {
         try {
             return restauranteService.salvar(restaurante);
         } catch (

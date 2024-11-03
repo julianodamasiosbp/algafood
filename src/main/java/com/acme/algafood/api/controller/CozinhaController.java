@@ -26,6 +26,8 @@ import com.acme.algafood.domain.service.CozinhaService;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebInputException;
 
+import javax.validation.Valid;
+
 //@Controller
 //@ResponseBody
 @RestController
@@ -50,7 +52,7 @@ public class CozinhaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cozinha adicionar(@RequestBody Cozinha cozinha) {
+    public Cozinha adicionar(@RequestBody @Valid Cozinha cozinha) {
         return cozinhaService.salvar(cozinha);
     }
 

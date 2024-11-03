@@ -1,7 +1,10 @@
 package com.acme.algafood.domain.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
+import com.acme.algafood.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,10 +18,12 @@ import java.util.List;
 public class Cozinha {
 	
 	@Id
+	@NotNull(groups = Groups.CadastroRestaurante.class)
 	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
+	@NotBlank
 	@Column(nullable = false)
 	private String nome;
 
