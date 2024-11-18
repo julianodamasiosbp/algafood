@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +27,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -32,6 +36,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocorreu um erro interno inesperado no sistema. " +
             "Tente novamente e se o problema " +
             "persistir, entre em contato com o administrador do sistema.";
+
+    @Autowired
+    private MessageSource messageSource;
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
@@ -92,10 +99,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         String detail = String.format("Dados inválidos, por favor, corrigir.");
         BindingResult bindingResult = ex.getBindingResult();
         List<Problem.Field> problemFields = bindingResult.getFieldErrors()
-                .stream().map(fieldError -> Problem.Field.builder()
-                        .name(fieldError.getField())
-                        .userMessage(fieldError.getDefaultMessage())
-                        .build()).collect(Collectors.toList());
+                .stream().map(fieldError -> {
+                    String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+                    return Problem.Field.builder()
+                            .name(fieldError.getField())
+                            .userMessage(message)
+                            .build();
+                }).collect(Collectors.toList());
         Problem problem = createProblemBuilder(status, problemType, detail)
                 .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
                 .fields(problemFields)
@@ -124,13 +134,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ResponseEntity<Object> handleInvalidFormat(InvalidFormatException ex, HttpHeaders headers,
-                                                                HttpStatus status, WebRequest request) {
+                                                       HttpStatus status, WebRequest request) {
         ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
 
         String path = joinPath(ex.getPath());
 
         String detail = String.format("A propriedade '%s' recebeu o valor '%s' " + "que é de um tipo inválido. Corrija "
-                + "e informe um valor compatível com o tipo '%s'", path, ex.getValue(),
+                        + "e informe um valor compatível com o tipo '%s'", path, ex.getValue(),
                 ex.getTargetType().getSimpleName());
         var problem = createProblemBuilder(status, problemType, detail)
                 .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
@@ -139,7 +149,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ResponseEntity<Object> handlePropertyBinding(PropertyBindingException ex, HttpHeaders headers,
-                                                                  HttpStatus status, WebRequest request) {
+                                                         HttpStatus status, WebRequest request) {
         ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
 
         String path = joinPath(ex.getPath());
@@ -154,7 +164,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     public ResponseEntity<?> handleEntidadeNaoEncontrado(EntidadeNaoEncontradaException ex,
-                                                                  WebRequest request) {
+                                                         WebRequest request) {
 
         HttpStatus status = HttpStatus.NOT_FOUND;
         String detail = ex.getMessage();
@@ -237,7 +247,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail
-                                                        ) {
+    ) {
         return Problem.builder().status(status.value()).type(problemType.getTitle())
                 .detail(detail).type(problemType.getUri()).timestamp(LocalDateTime.now());
     }

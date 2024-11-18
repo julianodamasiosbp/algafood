@@ -1,8 +1,6 @@
 package com.acme.algafood.api.controller;
 
-import com.acme.algafood.Groups;
 import com.acme.algafood.domain.exception.CozinhaNaoEncontradaException;
-import com.acme.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.acme.algafood.domain.exception.NegocioException;
 import com.acme.algafood.domain.model.Restaurante;
 import com.acme.algafood.domain.repository.RestauranteRepository;
@@ -16,9 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -61,7 +57,7 @@ public class RestauranteController {
 
     @PutMapping("/{restauranteId}")
     public Restaurante atualizar(@PathVariable Long restauranteId,
-                                 @RequestBody Restaurante restaurante) {
+                                 @RequestBody @Valid Restaurante restaurante) {
         Restaurante restauranteAtual = restauranteService.buscarOuFalhar(restauranteId);
 
         BeanUtils.copyProperties(restaurante, restauranteAtual,
