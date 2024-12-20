@@ -1,12 +1,6 @@
 package com.acme.algafood;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import javax.validation.ConstraintViolationException;
-
-import org.flywaydb.core.Flyway;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +9,9 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 
-import com.acme.algafood.domain.exception.CozinhaNaoEncontradaException;
-import com.acme.algafood.domain.exception.EntidadeEmUsoException;
 import com.acme.algafood.domain.model.Cozinha;
-import com.acme.algafood.domain.service.CozinhaService;
+import com.acme.algafood.domain.repository.CozinhaRepository;
+import com.acme.algafood.util.DatabaseCleaner;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -27,14 +20,18 @@ import io.restassured.http.ContentType;
 @TestPropertySource("/application-test.properties")
 class CadastroCozinhaIT {
 
-    @Autowired
-    private CozinhaService cozinhaService;
-
     @LocalServerPort
     private int port;
 
+    // @Autowired
+    // private Flyway flyway;
+
     @Autowired
-    private Flyway flyway;
+    private DatabaseCleaner databaseCleaner;
+
+    @Autowired
+    private CozinhaRepository cozinhaRepository;
+
 
     @BeforeEach
     public void setUp() {
@@ -42,7 +39,9 @@ class CadastroCozinhaIT {
         RestAssured.port = port;
         RestAssured.basePath = "/cozinhas";
 
-        flyway.migrate();
+        //flyway.migrate();
+        databaseCleaner.clearTables();
+        prepararDados();
     }
 
     // @Test
@@ -99,14 +98,14 @@ class CadastroCozinhaIT {
     }
 
     @Test
-    public void deveConter4Cozinhas_QuandoConsultarCozinhas(){
+    public void deveConter2Cozinhas_QuandoConsultarCozinhas(){
         RestAssured.given()
         .accept(ContentType.JSON)
         .when()
         .get()
         .then()
-        .body("", Matchers.hasSize(4))
-        .body("nome", Matchers.hasItems("Indiana", "Tailandesa"));
+        .body("", Matchers.hasSize(2))
+        .body("nome", Matchers.hasItems("Americana", "Tailandesa"));
     }
 
     @Test
@@ -119,5 +118,15 @@ class CadastroCozinhaIT {
         .post()
         .then()
         .statusCode(HttpStatus.CREATED.value());
+    }
+
+    private void prepararDados() {
+        Cozinha cozinhaTai = new Cozinha();
+        cozinhaTai.setNome("Tailandesa");
+        cozinhaRepository.save(cozinhaTai);
+
+        Cozinha cozinhaAmericana = new Cozinha();
+        cozinhaAmericana.setNome("Americana");
+        cozinhaRepository.save(cozinhaAmericana);
     }
 }

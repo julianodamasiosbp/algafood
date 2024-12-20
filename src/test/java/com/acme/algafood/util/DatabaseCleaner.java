@@ -1,4 +1,4 @@
-package util;
+package com.acme.algafood.util;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -22,7 +22,7 @@ public class DatabaseCleaner {
 
     @Autowired
     private DataSource dataSource;
-
+    
     private Connection connection;
 
     public void clearTables() {
