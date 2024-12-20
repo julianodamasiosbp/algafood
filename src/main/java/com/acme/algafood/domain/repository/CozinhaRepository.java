@@ -1,10 +1,10 @@
 package com.acme.algafood.domain.repository;
 
-import com.acme.algafood.domain.model.Cozinha;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.acme.algafood.domain.model.Cozinha;
 
 @Repository
 public interface CozinhaRepository extends CustomJpaRepository<Cozinha, Long> {
