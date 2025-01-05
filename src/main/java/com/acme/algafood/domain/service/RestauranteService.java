@@ -1,12 +1,14 @@
 package com.acme.algafood.domain.service;
 
-import com.acme.algafood.domain.exception.EntidadeNaoEncontradaException;
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.acme.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.acme.algafood.domain.model.Cozinha;
 import com.acme.algafood.domain.model.Restaurante;
 import com.acme.algafood.domain.repository.RestauranteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class RestauranteService {
@@ -17,6 +19,7 @@ public class RestauranteService {
 	@Autowired
 	private CozinhaService cozinhaService;
 
+	@Transactional
 	public Restaurante salvar(Restaurante restaurante) {
 		Long cozinhaId = restaurante.getCozinha().getId();
 
