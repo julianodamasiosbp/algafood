@@ -30,65 +30,63 @@ import com.acme.algafood.core.validation.Multiplo;
 import com.acme.algafood.core.validation.TaxaFrete;
 import com.acme.algafood.core.validation.ValorZeroIncluiDescricao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@ValorZeroIncluiDescricao(valorField = "taxaFrete",
-        descricaoField = "nome",
-        descricaoObrigatoria = "Frete Grátis")
+@ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Restaurante {
 
-    @Id
-    @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+        @Id
+        @EqualsAndHashCode.Include
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
-    @Column(nullable = false)
-    @NotBlank
-    private String nome;
+        @Column(nullable = false)
+        @NotBlank
+        private String nome;
 
-    @NotNull
-    //@PositiveOrZero(message = "{TaxaFrete.invalida}")
-    @Multiplo(numero = 5)
-    @TaxaFrete
-    @Column(name = " taxa_frete", nullable = false)
-    private BigDecimal taxaFrete;
+        @NotNull
+        // @PositiveOrZero(message = "{TaxaFrete.invalida}")
+        @Multiplo(numero = 5)
+        @TaxaFrete
+        @Column(name = " taxa_frete", nullable = false)
+        private BigDecimal taxaFrete;
 
-    //@JsonIgnore
-    //@JsonIgnoreProperties("hibernateLazyInitializer")
-    @NotNull
-    @Valid
-    @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
-    @ManyToOne //(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cozinha_id", nullable = false)
-    private Cozinha cozinha;
+        // @JsonIgnore
+        // @JsonIgnoreProperties("hibernateLazyInitializer")
+        @NotNull
+        @JsonIgnoreProperties(value = "nome", allowGetters = true)
+        @Valid
+        @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
+        @ManyToOne // (fetch = FetchType.LAZY)
+        @JoinColumn(name = "cozinha_id", nullable = false)
+        private Cozinha cozinha;
 
-    @JsonIgnore
-    @Embedded
-    private Endereco endereco;
+        @JsonIgnore
+        @Embedded
+        private Endereco endereco;
 
-    @JsonIgnore
-    @CreationTimestamp
-    @Column(nullable = false, columnDefinition = "datetime")
-    private LocalDateTime dataCadastro;
+        @JsonIgnore
+        @CreationTimestamp
+        @Column(nullable = false, columnDefinition = "datetime")
+        private LocalDateTime dataCadastro;
 
-    @JsonIgnore
-    @UpdateTimestamp
-    @Column(nullable = false, columnDefinition = "datetime")
-    private LocalDateTime dataAtualizacao;
+        @JsonIgnore
+        @UpdateTimestamp
+        @Column(nullable = false, columnDefinition = "datetime")
+        private LocalDateTime dataAtualizacao;
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "restaurante_forma_pagamento",
-            joinColumns = @JoinColumn(name = "restaurante_id"),
-            inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
-    private List<FormaPagamento> formasPagamento = new ArrayList<>();
+        @JsonIgnore
+        @ManyToMany
+        @JoinTable(name = "restaurante_forma_pagamento", joinColumns = @JoinColumn(name = "restaurante_id"), inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
+        private List<FormaPagamento> formasPagamento = new ArrayList<>();
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "restaurante")
-    private List<Produto> produtos = new ArrayList<>();
+        @JsonIgnore
+        @OneToMany(mappedBy = "restaurante")
+        private List<Produto> produtos = new ArrayList<>();
 }
