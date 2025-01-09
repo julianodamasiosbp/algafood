@@ -11,7 +11,7 @@ import com.acme.algafood.domain.model.Produto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-public class RestauranteMixin {
+public abstract class RestauranteMixin {
 
     // @JsonIgnore
     // @JsonIgnoreProperties("hibernateLazyInitializer")
@@ -31,6 +31,6 @@ public class RestauranteMixin {
     private List<FormaPagamento> formasPagamento = new ArrayList<>();
 
     @JsonIgnore
-    private List<Produto> produtos = new ArrayList<>();
+    private List<Produto> produto;
 
 }
