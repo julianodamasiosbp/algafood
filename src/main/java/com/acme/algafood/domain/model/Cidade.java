@@ -13,6 +13,8 @@ import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
 import com.acme.algafood.core.validation.Groups;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,12 +22,12 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Cidade {
-	
+
 	@Id
 	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(nullable = false)
 	private String nome;
 
