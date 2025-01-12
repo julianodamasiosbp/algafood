@@ -1,6 +1,6 @@
 package com.acme.algafood.api.model.mixin;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 public abstract class RestauranteMixin {
 
-    // @JsonIgnore
     // @JsonIgnoreProperties("hibernateLazyInitializer")
     @JsonIgnoreProperties(value = "nome", allowGetters = true)
     private Cozinha cozinha;
@@ -21,16 +20,16 @@ public abstract class RestauranteMixin {
     @JsonIgnore
     private Endereco endereco;
 
-    @JsonIgnore
-    private LocalDateTime dataCadastro;
+    // @JsonIgnore
+    private OffsetDateTime dataCadastro;
 
-    @JsonIgnore
-    private LocalDateTime dataAtualizacao;
+    // @JsonIgnore
+    private OffsetDateTime dataAtualizacao;
 
     @JsonIgnore
     private List<FormaPagamento> formasPagamento = new ArrayList<>();
 
     @JsonIgnore
-    private List<Produto> produto;
+    private List<Produto> produtos;
 
 }

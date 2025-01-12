@@ -1,4 +1,4 @@
-package com.acme.algafood.core;
+package com.acme.algafood.core.jackson;
 
 import org.springframework.stereotype.Component;
 
