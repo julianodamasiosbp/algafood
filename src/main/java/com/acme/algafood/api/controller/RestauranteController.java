@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.acme.algafood.api.model.RestauranteModel;
 import com.acme.algafood.core.validation.ValidacaoException;
 import com.acme.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.acme.algafood.domain.exception.NegocioException;
@@ -54,26 +55,25 @@ public class RestauranteController {
     }
 
     @GetMapping("/{restauranteId}")
-    public Restaurante buscar(@PathVariable Long restauranteId) {
-        return restauranteService.buscarOuFalhar(restauranteId);
+    public RestauranteModel buscar(@PathVariable Long restauranteId) {
+
+        RestauranteModel restauranteModel = null;
+        return restauranteModel;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurante adicionar(@RequestBody
-                                 @Valid
-                                 Restaurante restaurante) {
+    public Restaurante adicionar(@RequestBody @Valid Restaurante restaurante) {
         try {
             return restauranteService.salvar(restaurante);
-        } catch (
-                CozinhaNaoEncontradaException e) {
+        } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
     }
 
     @PutMapping("/{restauranteId}")
     public Restaurante atualizar(@PathVariable Long restauranteId,
-                                 @RequestBody @Valid Restaurante restaurante) {
+            @RequestBody @Valid Restaurante restaurante) {
         Restaurante restauranteAtual = restauranteService.buscarOuFalhar(restauranteId);
 
         BeanUtils.copyProperties(restaurante, restauranteAtual,
@@ -88,7 +88,7 @@ public class RestauranteController {
 
     @PatchMapping("/{restauranteId}")
     public Restaurante atualizarParcial(@PathVariable Long restauranteId,
-                                        @RequestBody Map<String, Object> campos, HttpServletRequest request) {
+            @RequestBody Map<String, Object> campos, HttpServletRequest request) {
         Restaurante restauranteAtual = restauranteService.buscarOuFalhar(restauranteId);
 
         merge(campos, restauranteAtual, request);
@@ -106,7 +106,7 @@ public class RestauranteController {
     }
 
     private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino,
-                       HttpServletRequest request) {
+            HttpServletRequest request) {
         ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
 
         try {
@@ -118,11 +118,11 @@ public class RestauranteController {
 
             dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
                 Field field = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
-                if(field != null) {
+                if (field != null) {
                     field.setAccessible(true);
 
                     Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
-    
+
                     ReflectionUtils.setField(field, restauranteDestino, novoValor);
                 }
 

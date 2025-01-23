@@ -17,8 +17,11 @@ public class ItemPedido {
     private Long id;
 
     private BigDecimal precoUnitario;
+
     private BigDecimal precoTotal;
+
     private Integer quantidade;
+
     private String observacao;
 
     @ManyToOne
@@ -28,6 +31,5 @@ public class ItemPedido {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Produto produto;
-
 
 }
