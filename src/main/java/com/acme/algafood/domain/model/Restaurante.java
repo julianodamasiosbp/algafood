@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
@@ -48,10 +49,10 @@ public class Restaurante {
         @NotBlank
         private String nome;
 
-        // @PositiveOrZero(message = "{TaxaFrete.invalida}")
+        // @Multiplo(numero = 5)
+        // @TaxaFrete
+        @PositiveOrZero(message = "{TaxaFrete.invalida}")
         @NotNull
-        @Multiplo(numero = 5)
-        @TaxaFrete
         @Column(name = " taxa_frete", nullable = false)
         private BigDecimal taxaFrete;
 
