@@ -27,8 +27,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.acme.algafood.core.validation.Groups;
-import com.acme.algafood.core.validation.Multiplo;
-import com.acme.algafood.core.validation.TaxaFrete;
 import com.acme.algafood.core.validation.ValorZeroIncluiDescricao;
 
 import lombok.Data;
