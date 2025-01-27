@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.acme.algafood.api.model.input.RestauranteInput;
+import com.acme.algafood.api.model.request.RestauranteInput;
 import com.acme.algafood.domain.model.Cozinha;
 import com.acme.algafood.domain.model.Restaurante;
 

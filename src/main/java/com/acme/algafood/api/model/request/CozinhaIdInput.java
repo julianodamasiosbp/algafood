@@ -1,4 +1,4 @@
-package com.acme.algafood.api.model.input;
+package com.acme.algafood.api.model.request;
 
 import javax.validation.constraints.NotNull;
 

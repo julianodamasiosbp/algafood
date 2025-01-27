@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.acme.algafood.api.assembler.RestauranteInputDisassembler;
 import com.acme.algafood.api.assembler.RestauranteModelAssembler;
-import com.acme.algafood.api.model.RestauranteModel;
-import com.acme.algafood.api.model.input.RestauranteInput;
+import com.acme.algafood.api.model.request.RestauranteInput;
+import com.acme.algafood.api.model.response.RestauranteModel;
 import com.acme.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.acme.algafood.domain.exception.NegocioException;
 import com.acme.algafood.domain.model.Restaurante;
