@@ -1,5 +1,7 @@
 package com.acme.algafood.api.model.request;
 
+import javax.validation.constraints.NotBlank;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class EstadoInput {
 
+    @NotBlank
     private String nome;
 
 }

@@ -1,5 +1,6 @@
 package com.acme.algafood.api.model.request;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -14,6 +15,7 @@ public class CidadeInput {
     private String nome;
 
     @NotNull
+    @Valid
     private EstadoIdInput estado;
 
 }
