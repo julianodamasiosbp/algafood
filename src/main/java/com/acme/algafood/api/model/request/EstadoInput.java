@@ -7,8 +7,6 @@ import lombok.Setter;
 @Setter
 public class EstadoInput {
 
-    private Long id;
-
     private String nome;
 
 }
