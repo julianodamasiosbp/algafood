@@ -2,6 +2,8 @@ package com.acme.algafood.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,7 +51,8 @@ public class GrupoController {
     }
 
     @PostMapping
-    public GrupoModel adicionar(@RequestBody GrupoInput grupoInput) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public GrupoModel adicionar(@RequestBody @Valid GrupoInput grupoInput) {
         Grupo grupoSalvo = grupoService.salvar(grupoInputDisassembler.toDomain(grupoInput));
         return grupoModelAssembler.toModel(grupoSalvo);
     }
