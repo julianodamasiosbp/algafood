@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -51,6 +52,13 @@ public class GrupoController {
     public GrupoModel adicionar(@RequestBody GrupoInput grupoInput) {
         Grupo grupoSalvo = grupoService.salvar(grupoInputDisassembler.toDomain(grupoInput));
         return grupoModelAssembler.toModel(grupoSalvo);
+    }
+
+    @PutMapping("/{grupoId}")
+    public GrupoModel atualizar(@PathVariable Long grupoId, @RequestBody GrupoInput grupoInput) {
+        Grupo grupoAtual = grupoService.buscarOuFalhar(grupoId);
+        grupoInputDisassembler.copyToDomainObject(grupoInput, grupoAtual);
+        return grupoModelAssembler.toModel(grupoService.salvar(grupoAtual));
     }
 
     @DeleteMapping("/{grupoId}")
