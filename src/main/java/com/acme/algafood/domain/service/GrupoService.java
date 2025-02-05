@@ -5,14 +5,19 @@ import java.beans.Transient;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.acme.algafood.domain.exception.EntidadeEmUsoException;
 import com.acme.algafood.domain.exception.GrupoNaoEncontradoException;
 import com.acme.algafood.domain.model.Grupo;
 import com.acme.algafood.domain.repository.GrupoRepository;
 
 @Service
 public class GrupoService {
+
+    private static final String MSG_GRUPO_EM_USO = "Grupo de código %d não pode ser removido, pois está em uso";
 
     @Autowired
     private GrupoRepository grupoRepository;
@@ -29,8 +34,17 @@ public class GrupoService {
 
     @Transactional
     public void excluir(Long grupoId) {
-        Grupo grupo = buscarOuFalhar(grupoId);
-        grupoRepository.delete(grupo);
+        try {
+            grupoRepository.deleteById(grupoId);
+            grupoRepository.flush();
+
+        } catch (EmptyResultDataAccessException e) {
+            throw new GrupoNaoEncontradoException(grupoId);
+
+        } catch (DataIntegrityViolationException e) {
+            throw new EntidadeEmUsoException(
+                    String.format(MSG_GRUPO_EM_USO, grupoId));
+        }
     }
 
 }
