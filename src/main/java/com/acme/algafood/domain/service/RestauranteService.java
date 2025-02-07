@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.acme.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.acme.algafood.domain.model.Cidade;
 import com.acme.algafood.domain.model.Cozinha;
+import com.acme.algafood.domain.model.FormaPagamento;
 import com.acme.algafood.domain.model.Restaurante;
 import com.acme.algafood.domain.repository.RestauranteRepository;
 
@@ -24,6 +25,9 @@ public class RestauranteService {
 
 	@Autowired
 	private CidadeService cidadeService;
+
+	@Autowired
+	private FormaPagamentoService formaPagamentoService;
 
 	@Transactional
 	public Restaurante salvar(Restaurante restaurante) {
@@ -58,4 +62,19 @@ public class RestauranteService {
 				.orElseThrow(() -> new RestauranteNaoEncontradoException(
 						restauranteId));
 	}
+
+	@Transactional
+	public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
+		restaurante.vincularFormaPagamento(formaPagamento);
+	}
+
+	@Transactional
+	public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
+		restaurante.desvincularFormaPagamento(formaPagamento);
+	}
+
 }
