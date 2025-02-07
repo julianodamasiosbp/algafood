@@ -8,12 +8,12 @@ import javax.persistence.EntityManager;
 import java.util.Optional;
 
 public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID>
-implements CustomJpaRepository<T, ID> {
+        implements CustomJpaRepository<T, ID> {
 
     private EntityManager em;
 
     public CustomJpaRepositoryImpl(JpaEntityInformation<T, ?> entityInformation,
-                                   EntityManager entityManager) {
+            EntityManager entityManager) {
         super(entityInformation, entityManager);
         this.em = entityManager;
     }
@@ -25,5 +25,10 @@ implements CustomJpaRepository<T, ID> {
                 .setMaxResults(1)
                 .getSingleResult();
         return Optional.ofNullable(entity);
+    }
+
+    @Override
+    public void detach(T entity) {
+        em.detach(entity);
     }
 }
