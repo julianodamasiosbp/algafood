@@ -1,5 +1,7 @@
 package com.acme.algafood.domain.repository;
 
-public interface ProdutoRepository {
+import com.acme.algafood.domain.model.Produto;
+
+public interface ProdutoRepository extends CustomJpaRepository<Produto, Long> {
 
 }
