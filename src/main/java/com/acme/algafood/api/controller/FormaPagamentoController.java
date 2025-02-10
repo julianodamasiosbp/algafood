@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.acme.algafood.api.assembler.FormaPagamentoInputDisassembler;
 import com.acme.algafood.api.assembler.FormaPagamentoModelAssembler;
+import com.acme.algafood.api.disassembler.FormaPagamentoInputDisassembler;
 import com.acme.algafood.api.model.request.FormaPagamentoInput;
 import com.acme.algafood.api.model.response.FormaPagamentoModel;
 import com.acme.algafood.domain.model.FormaPagamento;

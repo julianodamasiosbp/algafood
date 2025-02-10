@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.acme.algafood.api.assembler.RestauranteInputDisassembler;
 import com.acme.algafood.api.assembler.RestauranteModelAssembler;
+import com.acme.algafood.api.disassembler.RestauranteInputDisassembler;
 import com.acme.algafood.api.model.request.RestauranteInput;
 import com.acme.algafood.api.model.response.RestauranteModel;
 import com.acme.algafood.domain.exception.CidadeNaoEncontradaException;

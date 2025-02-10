@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.acme.algafood.api.assembler.EstadoInputDisassembler;
 import com.acme.algafood.api.assembler.EstadoModelAssembler;
+import com.acme.algafood.api.disassembler.EstadoInputDisassembler;
 import com.acme.algafood.api.model.request.EstadoInput;
 import com.acme.algafood.api.model.response.EstadoModel;
 import com.acme.algafood.domain.model.Estado;

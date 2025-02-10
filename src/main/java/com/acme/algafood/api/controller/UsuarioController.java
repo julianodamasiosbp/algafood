@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.acme.algafood.api.assembler.UsuarioInputDisassembler;
 import com.acme.algafood.api.assembler.UsuarioModelAssembler;
-import com.acme.algafood.api.assembler.UsuarioSemSenhaInputDisassembler;
+import com.acme.algafood.api.disassembler.UsuarioInputDisassembler;
+import com.acme.algafood.api.disassembler.UsuarioSemSenhaInputDisassembler;
 import com.acme.algafood.api.model.request.SenhaInput;
 import com.acme.algafood.api.model.request.UsuarioInput;
 import com.acme.algafood.api.model.request.UsuarioSemSenhaInput;
