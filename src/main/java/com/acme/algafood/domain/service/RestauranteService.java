@@ -11,6 +11,7 @@ import com.acme.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.acme.algafood.domain.model.Cidade;
 import com.acme.algafood.domain.model.Cozinha;
 import com.acme.algafood.domain.model.FormaPagamento;
+import com.acme.algafood.domain.model.Produto;
 import com.acme.algafood.domain.model.Restaurante;
 import com.acme.algafood.domain.repository.RestauranteRepository;
 
@@ -75,6 +76,20 @@ public class RestauranteService {
 		Restaurante restaurante = buscarOuFalhar(restauranteId);
 		FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
 		restaurante.desvincularFormaPagamento(formaPagamento);
+	}
+
+	@Transactional
+	public Produto adicionarNovoProduto(Long restauranteId, Produto produto) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+
+		restaurante.adicionarProduto(produto);
+
+		// restaurante.getProdutos().stream().forEach(p ->
+		// System.out.println(p.getNome()));
+
+		// salvar(restaurante);
+
+		return produto;
 	}
 
 }
