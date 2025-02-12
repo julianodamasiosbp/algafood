@@ -79,17 +79,15 @@ public class RestauranteService {
 	}
 
 	@Transactional
-	public Produto adicionarNovoProduto(Long restauranteId, Produto produto) {
+	public void fechar(Long restauranteId) {
 		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		restaurante.encerrarAtividades();
+	}
 
-		restaurante.adicionarProduto(produto);
-
-		// restaurante.getProdutos().stream().forEach(p ->
-		// System.out.println(p.getNome()));
-
-		// salvar(restaurante);
-
-		return produto;
+	@Transactional
+	public void abrir(Long restauranteId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		restaurante.iniciarAtividades();
 	}
 
 }

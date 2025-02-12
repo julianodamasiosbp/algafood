@@ -19,7 +19,6 @@ import com.acme.algafood.api.assembler.ProdutoModelAssembler;
 import com.acme.algafood.api.disassembler.ProdutoInputDisassembler;
 import com.acme.algafood.api.model.request.ProdutoInput;
 import com.acme.algafood.api.model.response.ProdutoModel;
-import com.acme.algafood.domain.exception.ProdutoNaoEncontradoException;
 import com.acme.algafood.domain.model.Produto;
 import com.acme.algafood.domain.model.Restaurante;
 import com.acme.algafood.domain.repository.ProdutoRepository;
@@ -33,9 +32,6 @@ public class RestauranteProdutoController {
 
     @Autowired
     private ProdutoRepository produtoRepository;
-
-    @Autowired
-    private RestauranteRepository restauranteRepository;
 
     @Autowired
     private RestauranteService restauranteService;
