@@ -71,6 +71,8 @@ insert into grupo (nome) values ("Vendedor");
 insert into grupo (nome) values ("Secretaria");
 insert into grupo (nome) values ("Cadastrador");
 
+insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1);
+
 insert into usuario (nome, email, senha, data_cadastro) values ('Pedro', 'pedro@acme.com', '123', utc_timestamp);
 insert into usuario (nome, email, senha, data_cadastro) values ('Maria', 'maria@acme.com', '123', utc_timestamp);
 insert into usuario (nome, email, senha, data_cadastro) values ('Gabriel', 'gabriel@acme.com', '123', utc_timestamp);
