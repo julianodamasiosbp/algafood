@@ -1,7 +1,5 @@
 package com.acme.algafood.domain.service;
 
-import java.beans.Transient;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.acme.algafood.domain.exception.EntidadeEmUsoException;
 import com.acme.algafood.domain.exception.GrupoNaoEncontradoException;
 import com.acme.algafood.domain.model.Grupo;
+import com.acme.algafood.domain.model.Permissao;
 import com.acme.algafood.domain.repository.GrupoRepository;
 
 @Service
@@ -21,6 +20,9 @@ public class GrupoService {
 
     @Autowired
     private GrupoRepository grupoRepository;
+
+    @Autowired
+    private PermissaoService permissaoService;
 
     public Grupo buscarOuFalhar(Long grupoId) {
         return grupoRepository.findById(grupoId)
@@ -45,6 +47,20 @@ public class GrupoService {
             throw new EntidadeEmUsoException(
                     String.format(MSG_GRUPO_EM_USO, grupoId));
         }
+    }
+
+    @Transactional
+    public void desassociarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarOuFalhar(grupoId);
+        Permissao permissao = permissaoService.buscarOuFalhar(permissaoId);
+        grupo.desassociarPermissao(permissao);
+    }
+
+    @Transactional
+    public void associarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarOuFalhar(grupoId);
+        Permissao permissao = permissaoService.buscarOuFalhar(permissaoId);
+        grupo.associarPermissao(permissao);
     }
 
 }
