@@ -13,6 +13,7 @@ import com.acme.algafood.api.model.request.SenhaInput;
 import com.acme.algafood.domain.exception.EntidadeEmUsoException;
 import com.acme.algafood.domain.exception.NegocioException;
 import com.acme.algafood.domain.exception.UsuarioNaoEncontradoException;
+import com.acme.algafood.domain.model.Grupo;
 import com.acme.algafood.domain.model.Usuario;
 import com.acme.algafood.domain.repository.UsuarioRepository;
 
@@ -21,6 +22,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private GrupoService grupoService;
 
     private static final String MSG_USUARIO_EM_USO = "Usuário de código %d não pode ser removido, pois está em uso";
 
@@ -64,5 +68,21 @@ public class UsuarioService {
         }
 
         return usuarioSalvo;
+    }
+
+    @Transactional
+    public void desassociarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarOuFalhar(usuarioId);
+        Grupo grupo = grupoService.buscarOuFalhar(grupoId);
+
+        usuario.removerGrupo(grupo);
+    }
+
+    @Transactional
+    public void associarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarOuFalhar(usuarioId);
+        Grupo grupo = grupoService.buscarOuFalhar(grupoId);
+
+        usuario.adicionarGrupo(grupo);
     }
 }
