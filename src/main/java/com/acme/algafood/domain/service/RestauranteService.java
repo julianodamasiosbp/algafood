@@ -1,7 +1,5 @@
 package com.acme.algafood.domain.service;
 
-import java.util.Optional;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +9,8 @@ import com.acme.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.acme.algafood.domain.model.Cidade;
 import com.acme.algafood.domain.model.Cozinha;
 import com.acme.algafood.domain.model.FormaPagamento;
-import com.acme.algafood.domain.model.Produto;
 import com.acme.algafood.domain.model.Restaurante;
+import com.acme.algafood.domain.model.Usuario;
 import com.acme.algafood.domain.repository.RestauranteRepository;
 
 @Service
@@ -29,6 +27,9 @@ public class RestauranteService {
 
 	@Autowired
 	private FormaPagamentoService formaPagamentoService;
+
+	@Autowired
+	private UsuarioService usuarioService;
 
 	@Transactional
 	public Restaurante salvar(Restaurante restaurante) {
@@ -79,7 +80,13 @@ public class RestauranteService {
 	}
 
 	@Transactional
-	public void fechar(Long restauranteId) {
+	public void abrirRestaurante(Long restauranteId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		restaurante.iniciarAtividades();
+	}
+
+	@Transactional
+	public void fecharRestaurante(Long restauranteId) {
 		Restaurante restaurante = buscarOuFalhar(restauranteId);
 		restaurante.encerrarAtividades();
 	}
@@ -88,6 +95,22 @@ public class RestauranteService {
 	public void abrir(Long restauranteId) {
 		Restaurante restaurante = buscarOuFalhar(restauranteId);
 		restaurante.iniciarAtividades();
+	}
+
+	@Transactional
+	public void associarReponsavel(Long restauranteId, Long usuarioId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
+
+		restaurante.vincularResponsavel(usuario);
+	}
+
+	@Transactional
+	public void desassociarReponsavel(Long restauranteId, Long usuarioId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
+
+		restaurante.desvincularResponsavel(usuario);
 	}
 
 }
