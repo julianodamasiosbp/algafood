@@ -25,6 +25,7 @@ import com.acme.algafood.api.model.response.RestauranteModel;
 import com.acme.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.acme.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.acme.algafood.domain.exception.NegocioException;
+import com.acme.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.acme.algafood.domain.model.Restaurante;
 import com.acme.algafood.domain.repository.RestauranteRepository;
 import com.acme.algafood.domain.service.RestauranteService;
@@ -102,6 +103,27 @@ public class RestauranteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void inativar(@PathVariable Long restauranteId) {
         restauranteService.inativar(restauranteId);
+    }
+
+    @PutMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativarMultiplos(@RequestBody List<Long> restaurantesIds) {
+        try {
+            restauranteService.ativar(restaurantesIds);
+        } catch (RestauranteNaoEncontradoException ex) {
+            throw new NegocioException(ex.getMessage(), ex);
+        }
+
+    }
+
+    @DeleteMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void desativarMultiplos(@RequestBody List<Long> restaurantesIds) {
+        try {
+            restauranteService.inativar(restaurantesIds);
+        } catch (RestauranteNaoEncontradoException ex) {
+            throw new NegocioException(ex.getMessage(), ex);
+        }
     }
 
     @PutMapping("/{restauranteId}/fechamento")
