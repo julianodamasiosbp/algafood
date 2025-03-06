@@ -9,6 +9,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,9 +35,9 @@ public class Pedido {
     private Long id;
 
     private BigDecimal subtotal;
-    
+
     private BigDecimal taxaFrete;
-    
+
     private BigDecimal valorTotal;
 
     @Embedded
@@ -54,7 +55,7 @@ public class Pedido {
 
     private OffsetDateTime dataEntrega;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private FormaPagamento formaPagamento;
 
@@ -71,16 +72,16 @@ public class Pedido {
 
     public void calcularValorTotal() {
         this.subtotal = getItens().stream()
-            .map(item -> item.getPrecoTotal())
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
-        
+                .map(item -> item.getPrecoTotal())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
         this.valorTotal = this.subtotal.add(this.taxaFrete);
     }
-    
+
     public void definirFrete() {
         setTaxaFrete(getRestaurante().getTaxaFrete());
     }
-    
+
     public void atribuirPedidoAosItens() {
         getItens().forEach(item -> item.setPedido(this));
     }
