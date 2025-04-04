@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import com.acme.algafood.domain.model.Restaurante;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class PedidoModel {
 
-    private Long id;
+    private String codigo;
 
     private BigDecimal subtotal;
 

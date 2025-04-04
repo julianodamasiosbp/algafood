@@ -1,7 +1,5 @@
 package com.acme.algafood.domain.service;
 
-import java.util.List;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +15,9 @@ public class PedidoService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    public Pedido buscarOuFalhar(Long pedidoId) {
-        return pedidoRepository.findById(pedidoId).orElseThrow(() -> new PedidoNaoEncontradoException(pedidoId));
+    public Pedido buscarOuFalhar(String codigoPedido) {
+        return pedidoRepository.findByCodigo(codigoPedido)
+                .orElseThrow(() -> new PedidoNaoEncontradoException(codigoPedido));
     }
 
     @Transactional

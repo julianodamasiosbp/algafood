@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +24,7 @@ import com.acme.algafood.api.assembler.RestauranteModelAssembler;
 import com.acme.algafood.api.disassembler.RestauranteInputDisassembler;
 import com.acme.algafood.api.model.request.RestauranteInput;
 import com.acme.algafood.api.model.response.RestauranteModel;
+import com.acme.algafood.api.model.view.RestauranteView;
 import com.acme.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.acme.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.acme.algafood.domain.exception.NegocioException;
@@ -29,6 +32,7 @@ import com.acme.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.acme.algafood.domain.model.Restaurante;
 import com.acme.algafood.domain.repository.RestauranteRepository;
 import com.acme.algafood.domain.service.RestauranteService;
+import com.fasterxml.jackson.annotation.JsonView;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -49,10 +53,37 @@ public class RestauranteController {
     @Autowired
     private RestauranteInputDisassembler restauranteInputDisassembler;
 
+    /*
+     * @GetMapping
+     * public MappingJacksonValue listar(@RequestParam(required = false) String
+     * projecao) {
+     * List<RestauranteModel> restaurantesModel = restauranteModelAssembler
+     * .toCollectionModel(restauranteRepository.findAll());
+     * 
+     * MappingJacksonValue restaurantesWrapper = new
+     * MappingJacksonValue(restaurantesModel);
+     * 
+     * restaurantesWrapper.setSerializationView(RestauranteView.Resumo.class);
+     * 
+     * if ("completo".equals(projecao)) {
+     * restaurantesWrapper.setSerializationView(null);
+     * }
+     * 
+     * return restaurantesWrapper;
+     * }
+     */
+
+    @JsonView(RestauranteView.Resumo.class)
     @GetMapping
     public List<RestauranteModel> listar() {
         return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
     }
+
+    // @JsonView(RestauranteView.Resumo.class)
+    // @GetMapping(params = "projecao=resumo")
+    // public List<RestauranteModel> listarResumido() {
+    // return listar();
+    // }
 
     @GetMapping("/{restauranteId}")
     public RestauranteModel buscar(@PathVariable Long restauranteId) {
