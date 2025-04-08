@@ -2,6 +2,7 @@ package com.acme.algafood.api.controller;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -27,6 +28,7 @@ import com.acme.algafood.api.disassembler.PedidoInputDisassembler;
 import com.acme.algafood.api.model.request.PedidoInput;
 import com.acme.algafood.api.model.response.PedidoModel;
 import com.acme.algafood.api.model.response.PedidoResumoModel;
+import com.acme.algafood.core.data.PageableTranslator;
 import com.acme.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.acme.algafood.domain.exception.NegocioException;
 import com.acme.algafood.domain.model.Pedido;
@@ -38,6 +40,7 @@ import com.acme.algafood.domain.service.PedidoService;
 import com.acme.algafood.infrastructure.repository.spec.PedidoSpecs;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.google.common.collect.ImmutableMap;
 
 import antlr.StringUtils;
 
@@ -90,6 +93,9 @@ public class PedidoController {
 
     @GetMapping
     public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, Pageable pageable) {
+
+        pageable = traduzirPageable(pageable);
+
         Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
         List<PedidoResumoModel> pedidosResumoModel = pedidoResumoModelAssembler
                 .toCollectionModel(pedidosPage.getContent());
@@ -120,6 +126,19 @@ public class PedidoController {
         } catch (EntidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
+    }
+
+    private Pageable traduzirPageable(Pageable apiPageable) {
+        var mapeamento = Map.of(
+                "codigo", "codigo",
+                "restaurante.nome", "restaurante.nome",
+                "nomeCliente", "cliente.nome",
+                "subtotal", "subtotal",
+                "restauranteId", "restaurante.id",
+                "taxaFrete", "taxaFrete",
+                "valorTotal", "valorTotal");
+
+        return PageableTranslator.translate(apiPageable, mapeamento);
     }
 
 }
