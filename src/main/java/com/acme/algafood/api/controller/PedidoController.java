@@ -6,6 +6,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -86,8 +89,14 @@ public class PedidoController {
     // }
 
     @GetMapping
-    public List<PedidoResumoModel> pesquisar(PedidoFilter filtro) {
-        return pedidoResumoModelAssembler.toCollectionModel(pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro)));
+    public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, Pageable pageable) {
+        Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
+        List<PedidoResumoModel> pedidosResumoModel = pedidoResumoModelAssembler
+                .toCollectionModel(pedidosPage.getContent());
+
+        Page<PedidoResumoModel> pedidosResumoPage = new PageImpl<>(pedidosResumoModel, pageable,
+                pedidosPage.getTotalElements());
+        return pedidosResumoPage;
     }
 
     @GetMapping("/{codigoPedido}")
