@@ -2,7 +2,6 @@ package com.acme.algafood.domain.repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +16,5 @@ public interface PedidoRepository extends CustomJpaRepository<Pedido, Long>, Jpa
     List<Pedido> findAll();
 
     Optional<Pedido> findByCodigo(String codigo);
+
 }

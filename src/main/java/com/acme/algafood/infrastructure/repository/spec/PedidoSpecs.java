@@ -1,8 +1,8 @@
 package com.acme.algafood.infrastructure.repository.spec;
 
+import com.acme.algafood.domain.filter.PedidoFilter;
 import com.acme.algafood.domain.model.Pedido;
 import com.acme.algafood.domain.model.Restaurante;
-import com.acme.algafood.domain.repository.filter.PedidoFilter;
 
 import org.springframework.data.jpa.domain.Specification;
 
