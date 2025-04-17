@@ -1,4 +1,4 @@
-package com.acme.algafood.infrastructure.storage;
+package com.acme.algafood.infrastructure.service.storage;
 
 public class StorageException extends RuntimeException {
 

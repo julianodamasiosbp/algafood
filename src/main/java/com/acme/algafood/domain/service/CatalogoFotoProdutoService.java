@@ -12,7 +12,7 @@ import com.acme.algafood.domain.exception.FotoProdutoNaoEncontradaException;
 import com.acme.algafood.domain.model.FotoProduto;
 import com.acme.algafood.domain.repository.ProdutoRepository;
 import com.acme.algafood.domain.service.FotoStorageService.NovaFoto;
-import com.acme.algafood.infrastructure.storage.StorageException;
+import com.acme.algafood.infrastructure.service.storage.StorageException;
 
 @Service
 public class CatalogoFotoProdutoService {
