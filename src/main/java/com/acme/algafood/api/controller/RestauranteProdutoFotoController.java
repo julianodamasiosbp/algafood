@@ -76,7 +76,7 @@ public class RestauranteProdutoFotoController {
     }
 
     @GetMapping
-    public ResponseEntity<InputStreamResource> servirFoto(@PathVariable Long restauranteId,
+    public ResponseEntity<InputStreamResource> servir(@PathVariable Long restauranteId,
             @PathVariable Long produtoId, @RequestHeader(name = "Accept") String acceptHeader)
             throws HttpMediaTypeNotAcceptableException {
         try {
