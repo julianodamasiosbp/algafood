@@ -12,7 +12,6 @@ import com.acme.algafood.domain.exception.FotoProdutoNaoEncontradaException;
 import com.acme.algafood.domain.model.FotoProduto;
 import com.acme.algafood.domain.repository.ProdutoRepository;
 import com.acme.algafood.domain.service.FotoStorageService.NovaFoto;
-import com.acme.algafood.infrastructure.service.storage.StorageException;
 
 @Service
 public class CatalogoFotoProdutoService {
@@ -42,7 +41,12 @@ public class CatalogoFotoProdutoService {
         foto = produtoRepository.save(foto);
         produtoRepository.flush();
 
-        NovaFoto novaFoto = NovaFoto.builder().nomeAquivo(foto.getNomeArquivo()).inputStream(dadosArquivo).build();
+        NovaFoto novaFoto = NovaFoto
+                .builder()
+                .nomeAquivo(foto.getNomeArquivo())
+                .inputStream(dadosArquivo)
+                .contentType(foto.getContentType())
+                .build();
 
         fotoStorageService.substituir(nomeArquivoExistente, novaFoto);
 

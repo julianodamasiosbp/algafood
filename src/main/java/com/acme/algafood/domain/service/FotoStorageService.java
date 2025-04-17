@@ -5,10 +5,11 @@ import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 public interface FotoStorageService {
 
-    InputStream recuperar(String nomeArquivo);
+    FotoRecuperada recuperar(String nomeArquivo);
 
     void armazenar(NovaFoto novaFoto);
 
@@ -31,7 +32,24 @@ public interface FotoStorageService {
 
         private String nomeAquivo;
         private InputStream inputStream;
+        private String contentType;
 
+    }
+
+    @Builder
+    @Getter
+    class FotoRecuperada {
+
+        private InputStream inputStream;
+        private String url;
+
+        public boolean hasUrl() {
+            return url != null;
+        }
+
+        public boolean hasInputStream() {
+            return inputStream != null;
+        }
     }
 
 }
