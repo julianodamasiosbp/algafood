@@ -12,7 +12,6 @@ import org.springframework.util.FileCopyUtils;
 import com.acme.algafood.core.storage.StorageProperties;
 import com.acme.algafood.domain.service.FotoStorageService;
 
-//@Service
 public class LocalFotoStorageService implements FotoStorageService {
 
     @Autowired
