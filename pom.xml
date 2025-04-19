@@ -82,6 +82,7 @@
           	<artifactId>modelmapper</artifactId>
           	<version>3.0.0</version>
       	</dependency>
+		
 		    <!--Squiggly -->
 		<dependency>
 			<groupId>com.github.bohnman</groupId>
@@ -101,18 +102,24 @@
             <artifactId>jasperreports-functions</artifactId>
             <version>${jasperreports.version}</version>
         </dependency>
+
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports-pdf</artifactId>
 			<version>${jasperreports.version}</version>
 		</dependency>
 
-		        <!-- AWS SDK -->
+		<!-- AWS SDK -->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
             <version>${aws-java-sdk-s3.version}</version>
         </dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+    	</dependency>
 
 	</dependencies>
 
