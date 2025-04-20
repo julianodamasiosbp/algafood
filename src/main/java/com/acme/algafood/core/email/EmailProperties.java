@@ -17,6 +17,23 @@ import lombok.Setter;
 public class EmailProperties {
 
     @NotNull
-    private String Remetente;
+    private String remetente;
+
+    private Sandbox sandbox = new Sandbox();
+
+    @NotNull
+    private TipoImplementacao implementacao = TipoImplementacao.FAKE;
+
+    public enum TipoImplementacao {
+        SMTP,
+        FAKE,
+        SANDBOX
+    }
+
+    @Getter
+    @Setter
+    public class Sandbox {
+        private String destinatario;
+    }
 
 }
