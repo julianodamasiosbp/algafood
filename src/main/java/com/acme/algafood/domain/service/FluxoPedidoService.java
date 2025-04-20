@@ -1,14 +1,12 @@
 package com.acme.algafood.domain.service;
 
-import java.util.Set;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.acme.algafood.domain.model.Pedido;
-import com.acme.algafood.domain.service.EnvioEmailService.Mensagem;
+import com.acme.algafood.domain.repository.PedidoRepository;
 
 @Service
 public class FluxoPedidoService {
@@ -17,20 +15,14 @@ public class FluxoPedidoService {
     private PedidoService pedidoService;
 
     @Autowired
-    private EnvioEmailService envioEmailService;
+    private PedidoRepository pedidoRepository;
 
     @Transactional
     public void confirmar(String codigoPedido) {
         Pedido pedido = pedidoService.buscarOuFalhar(codigoPedido);
-
         pedido.confirmar();
 
-        var mensagem = Mensagem.builder().assunto(pedido.getRestaurante().getNome() + " - " + "Pedido confirmado")
-                .corpo("pedido-confirmado.html")
-                .variavel("pedido", pedido)
-                .destinatario(pedido.getCliente().getEmail()).build();
-
-        envioEmailService.enviar(mensagem);
+        pedidoRepository.save(pedido);
     }
 
     @Transactional
