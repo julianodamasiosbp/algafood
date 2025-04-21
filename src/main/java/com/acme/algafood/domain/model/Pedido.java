@@ -24,6 +24,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
 import com.acme.algafood.domain.enums.StatusPedido;
+import com.acme.algafood.domain.event.PedidoCanceladoEvent;
 import com.acme.algafood.domain.event.PedidoConfirmadoEvent;
 import com.acme.algafood.domain.exception.NegocioException;
 
@@ -112,6 +113,7 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
     public void cancelar() {
         setStatusPedido(StatusPedido.CANCELADO);
         setDataCancelamento(OffsetDateTime.now());
+        registerEvent(new PedidoCanceladoEvent(this));
     }
 
     private void setStatusPedido(StatusPedido novoStatus) {
