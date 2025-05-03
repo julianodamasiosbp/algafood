@@ -24,6 +24,7 @@ import com.acme.algafood.api.assembler.CozinhaModelAssembler;
 import com.acme.algafood.api.disassembler.CozinhaInputDisassembler;
 import com.acme.algafood.api.model.request.CozinhaInput;
 import com.acme.algafood.api.model.response.CozinhaModel;
+import com.acme.algafood.api.openapi.controller.CozinhaControllerOpenApi;
 import com.acme.algafood.domain.model.Cozinha;
 import com.acme.algafood.domain.repository.CozinhaRepository;
 import com.acme.algafood.domain.service.CozinhaService;
@@ -31,8 +32,8 @@ import com.acme.algafood.domain.service.CozinhaService;
 //@Controller
 //@ResponseBody
 @RestController
-@RequestMapping("/cozinhas")
-public class CozinhaController {
+@RequestMapping(path = "/cozinhas")
+public class CozinhaController implements CozinhaControllerOpenApi {
 
     @Autowired
     private CozinhaRepository cozinhaRepository;
@@ -61,13 +62,13 @@ public class CozinhaController {
         return cozinhaModelAssembler.toModel(cozinhaService.buscarOuFalhar(cozinhaId));
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Cozinha adicionar(@RequestBody @Valid CozinhaInput cozinhaInput) {
         return cozinhaService.salvar(cozinhaInputDisassembler.toDomainObject(cozinhaInput));
     }
 
-    @PutMapping("/{cozinhaId}")
+    @PutMapping(path = "/{cozinhaId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Cozinha atualizar(@PathVariable("cozinhaId") Long cozinhaId, @RequestBody @Valid CozinhaInput cozinhaInput) {
         Cozinha cozinhaAtual = cozinhaService.buscarOuFalhar(cozinhaId);
         cozinhaInputDisassembler.copyToDomainObject(cozinhaInput, cozinhaAtual);

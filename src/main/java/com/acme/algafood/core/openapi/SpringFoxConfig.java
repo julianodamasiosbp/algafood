@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.context.request.ServletWebRequest;
 
 import com.acme.algafood.api.exceptionhandler.Problem;
 import com.acme.algafood.api.model.response.CozinhaModel;
@@ -26,7 +27,6 @@ import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
-import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
@@ -58,9 +58,13 @@ public class SpringFoxConfig {
                                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
                                 .alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Page.class,
                                                 CozinhaModel.class), CozinhasModelOpenApi.class))
+                                .ignoredParameterTypes(ServletWebRequest.class)
                                 .apiInfo(apiInfo())
-                                .tags(new Tag("Cidades", "Gerencia as cidade"),
-                                                new Tag("Grupos", "Gerencia os grupos"));
+                                .tags(
+                                                new Tag("Cidades", "Gerencia as cidade"),
+                                                new Tag("Grupos", "Gerencia os grupos"),
+                                                new Tag("Cozinhas", "Gerencia as cozinhas"),
+                                                new Tag("Formas de Pagamentos", "Gerencia as formas de pagamentos"));
         }
 
         public ApiInfo apiInfo() {
