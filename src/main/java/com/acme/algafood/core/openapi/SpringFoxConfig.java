@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import com.acme.algafood.api.exceptionhandler.Problem;
-import com.acme.algafood.core.openapi.model.PageableModelOpenApi;
+import com.acme.algafood.api.openapi.model.PageableModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 

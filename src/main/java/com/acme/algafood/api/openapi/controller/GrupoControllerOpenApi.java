@@ -1,4 +1,4 @@
-package com.acme.algafood.api.controller.openapi;
+package com.acme.algafood.api.openapi.controller;
 
 import java.util.List;
 

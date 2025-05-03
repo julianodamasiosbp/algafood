@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.acme.algafood.api.assembler.GrupoModelAssembler;
-import com.acme.algafood.api.controller.openapi.GrupoControllerOpenApi;
 import com.acme.algafood.api.disassembler.GrupoInputDisassembler;
 import com.acme.algafood.api.model.request.GrupoInput;
 import com.acme.algafood.api.model.response.GrupoModel;
+import com.acme.algafood.api.openapi.controller.GrupoControllerOpenApi;
 import com.acme.algafood.domain.model.Grupo;
 import com.acme.algafood.domain.repository.GrupoRepository;
 import com.acme.algafood.domain.service.GrupoService;
