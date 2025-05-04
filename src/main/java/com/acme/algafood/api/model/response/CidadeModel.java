@@ -13,7 +13,7 @@ public class CidadeModel {
     @ApiModelProperty(example = "1")
     private Long id;
 
-    @ApiModelProperty(value = "ID da cidade", example = "Uberlândia")
+    @ApiModelProperty(value = "Nome da cidade", example = "Uberlândia")
     private String nome;
 
     private EstadoModel estado;
