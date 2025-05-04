@@ -19,31 +19,31 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @Api(tags = "Cozinhas")
 public interface CozinhaControllerOpenApi {
 
-    @ApiOperation(value = "Lista as cozinhas")
-    public Page<CozinhaModel> listar(Pageable pageable);
+        @ApiOperation(value = "Lista as cozinhas")
+        Page<CozinhaModel> listar(Pageable pageable);
 
-    @ApiOperation("Busca uma cozinha por ID")
-    @ApiResponses({
-            @ApiResponse(responseCode = "400", description = "ID da cozinha inválido", content = @Content(schema = @Schema(implementation = Problem.class))),
-            @ApiResponse(responseCode = "404", description = "Cozinha não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
-    })
-    public CozinhaModel buscar(@ApiParam(value = "ID de uma cozinha", example = "1", required = true) Long cozinhaId);
+        @ApiOperation("Busca uma cozinha por ID")
+        @ApiResponses({
+                        @ApiResponse(responseCode = "400", description = "ID da cozinha inválido", content = @Content(schema = @Schema(implementation = Problem.class))),
+                        @ApiResponse(responseCode = "404", description = "Cozinha não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
+        })
+        CozinhaModel buscar(@ApiParam(value = "ID de uma cozinha", example = "1", required = true) Long cozinhaId);
 
-    @ApiOperation("Cadastra uma cozinha")
-    @ApiResponse(responseCode = "201", description = "Cozinha criada", content = @Content(schema = @Schema(implementation = Problem.class)))
-    @ApiResponse(responseCode = "404", description = "Cozinha não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
-    public Cozinha adicionar(
-            @ApiParam(name = "corpo", value = "Representação de uma nova cozinha", required = true) CozinhaInput cozinhaInput);
+        @ApiOperation("Cadastra uma cozinha")
+        @ApiResponse(responseCode = "201", description = "Cozinha criada", content = @Content(schema = @Schema(implementation = Problem.class)))
+        @ApiResponse(responseCode = "404", description = "Cozinha não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
+        Cozinha adicionar(
+                        @ApiParam(name = "corpo", value = "Representação de uma nova cozinha", required = true) CozinhaInput cozinhaInput);
 
-    @ApiOperation("Atualiza uma cozinha por ID")
-    @ApiResponse(responseCode = "200", description = "Cozinha atualizada", content = @Content(schema = @Schema(implementation = Problem.class)))
-    @ApiResponse(responseCode = "404", description = "Cozinha não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
-    public Cozinha atualizar(@ApiParam(value = "ID de uma cozinha", example = "1", required = true) Long cozinhaId,
-            @ApiParam(name = "corpo", value = "Representação de uma cozinha com os novos dados") CozinhaInput cozinhaInpu);
+        @ApiOperation("Atualiza uma cozinha por ID")
+        @ApiResponse(responseCode = "200", description = "Cozinha atualizada", content = @Content(schema = @Schema(implementation = Problem.class)))
+        @ApiResponse(responseCode = "404", description = "Cozinha não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
+        Cozinha atualizar(@ApiParam(value = "ID de uma cozinha", example = "1", required = true) Long cozinhaId,
+                        @ApiParam(name = "corpo", value = "Representação de uma cozinha com os novos dados") CozinhaInput cozinhaInpu);
 
-    @ApiOperation("Exclui uma cozinha por ID")
-    @ApiResponse(responseCode = "204", description = "Cozinha excluída", content = @Content(schema = @Schema(implementation = Problem.class)))
-    @ApiResponse(responseCode = "404", description = "Cozinha não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
-    public void remover(@ApiParam(value = "ID de uma cozinha", example = "1", required = true) Long cozinhaId);
+        @ApiOperation("Exclui uma cozinha por ID")
+        @ApiResponse(responseCode = "204", description = "Cozinha excluída", content = @Content(schema = @Schema(implementation = Problem.class)))
+        @ApiResponse(responseCode = "404", description = "Cozinha não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
+        void remover(@ApiParam(value = "ID de uma cozinha", example = "1", required = true) Long cozinhaId);
 
 }

@@ -29,30 +29,30 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @Api(tags = "Estados")
 public interface EstadoControllerOpenApi {
 
-    public List<EstadoModel> listar();
+        List<EstadoModel> listar();
 
-    @ApiOperation("Busca um estado por ID")
-    @ApiResponses({
-            @ApiResponse(responseCode = "400", description = "ID do estado inválido", content = @Content(schema = @Schema(implementation = Problem.class))),
-            @ApiResponse(responseCode = "404", description = "Estado não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-    })
-    public EstadoModel buscar(@ApiParam(value = "ID de um estado", example = "1", required = true) Long id);
+        @ApiOperation("Busca um estado por ID")
+        @ApiResponses({
+                        @ApiResponse(responseCode = "400", description = "ID do estado inválido", content = @Content(schema = @Schema(implementation = Problem.class))),
+                        @ApiResponse(responseCode = "404", description = "Estado não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
+        })
+        EstadoModel buscar(@ApiParam(value = "ID de um estado", example = "1", required = true) Long id);
 
-    @ApiOperation("Cadastra um estado")
-    @ApiResponse(responseCode = "201", description = "Estado criado", content = @Content(schema = @Schema(implementation = Problem.class)))
-    @ApiResponse(responseCode = "404", description = "Estado não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-    public EstadoModel adicionar(
-            @ApiParam(name = "corpo", value = "Representação de um novo estado") EstadoInput estadoInput);
+        @ApiOperation("Cadastra um estado")
+        @ApiResponse(responseCode = "201", description = "Estado criado", content = @Content(schema = @Schema(implementation = Problem.class)))
+        @ApiResponse(responseCode = "404", description = "Estado não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
+        EstadoModel adicionar(
+                        @ApiParam(name = "corpo", value = "Representação de um novo estado") EstadoInput estadoInput);
 
-    @ApiOperation("Atualiza um estado por ID")
-    @ApiResponse(responseCode = "200", description = "Estado atualizado", content = @Content(schema = @Schema(implementation = Problem.class)))
-    @ApiResponse(responseCode = "404", description = "Estado não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-    public EstadoModel atualizar(@ApiParam(value = "ID de um estado", example = "1", required = true) Long estadoId,
-            @ApiParam(name = "corpo", value = "Representação de um novo estado") EstadoInput estadoInput);
+        @ApiOperation("Atualiza um estado por ID")
+        @ApiResponse(responseCode = "200", description = "Estado atualizado", content = @Content(schema = @Schema(implementation = Problem.class)))
+        @ApiResponse(responseCode = "404", description = "Estado não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
+        EstadoModel atualizar(@ApiParam(value = "ID de um estado", example = "1", required = true) Long estadoId,
+                        @ApiParam(name = "corpo", value = "Representação de um novo estado") EstadoInput estadoInput);
 
-    @ApiOperation("Exclui um estado por ID")
-    @ApiResponse(responseCode = "204", description = "Estado excluído", content = @Content(schema = @Schema(implementation = Problem.class)))
-    @ApiResponse(responseCode = "404", description = "Estado não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-    public void remover(@ApiParam(value = "ID de um estado", example = "1", required = true) Long id);
+        @ApiOperation("Exclui um estado por ID")
+        @ApiResponse(responseCode = "204", description = "Estado excluído", content = @Content(schema = @Schema(implementation = Problem.class)))
+        @ApiResponse(responseCode = "404", description = "Estado não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
+        void remover(@ApiParam(value = "ID de um estado", example = "1", required = true) Long id);
 
 }
