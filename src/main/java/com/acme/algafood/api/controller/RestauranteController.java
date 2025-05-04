@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import com.acme.algafood.api.disassembler.RestauranteInputDisassembler;
 import com.acme.algafood.api.model.request.RestauranteInput;
 import com.acme.algafood.api.model.response.RestauranteModel;
 import com.acme.algafood.api.model.view.RestauranteView;
+import com.acme.algafood.api.openapi.controller.RestauranteControllerOpenApi;
 import com.acme.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.acme.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.acme.algafood.domain.exception.NegocioException;
@@ -32,8 +34,8 @@ import com.acme.algafood.domain.service.RestauranteService;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @RestController
-@RequestMapping("/restaurantes")
-public class RestauranteController {
+@RequestMapping(path = "/restaurantes", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteController implements RestauranteControllerOpenApi {
 
     @Autowired
     private RestauranteRepository restauranteRepository;
