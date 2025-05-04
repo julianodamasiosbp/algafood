@@ -21,13 +21,14 @@ import com.acme.algafood.api.assembler.EstadoModelAssembler;
 import com.acme.algafood.api.disassembler.EstadoInputDisassembler;
 import com.acme.algafood.api.model.request.EstadoInput;
 import com.acme.algafood.api.model.response.EstadoModel;
+import com.acme.algafood.api.openapi.controller.EstadoControllerOpenApi;
 import com.acme.algafood.domain.model.Estado;
 import com.acme.algafood.domain.repository.EstadoRepository;
 import com.acme.algafood.domain.service.EstadoService;
 
-@RequestMapping("/estados")
+@RequestMapping(path = "/estados", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
-public class EstadoController {
+public class EstadoController implements EstadoControllerOpenApi {
 
     @Autowired
     private EstadoRepository estadoRepository;
