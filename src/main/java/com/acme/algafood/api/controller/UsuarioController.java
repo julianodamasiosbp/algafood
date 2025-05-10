@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,13 +24,14 @@ import com.acme.algafood.api.model.request.SenhaInput;
 import com.acme.algafood.api.model.request.UsuarioInput;
 import com.acme.algafood.api.model.request.UsuarioSemSenhaInput;
 import com.acme.algafood.api.model.response.UsuarioModel;
+import com.acme.algafood.api.openapi.controller.UsuarioControllerOpenApi;
 import com.acme.algafood.domain.model.Usuario;
 import com.acme.algafood.domain.repository.UsuarioRepository;
 import com.acme.algafood.domain.service.UsuarioService;
 
 @RestController
-@RequestMapping("/usuarios")
-public class UsuarioController {
+@RequestMapping(path = "/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
+public class UsuarioController implements UsuarioControllerOpenApi {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
