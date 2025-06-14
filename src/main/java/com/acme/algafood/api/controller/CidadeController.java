@@ -1,13 +1,11 @@
 package com.acme.algafood.api.controller;
 
-import java.net.URI;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,9 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.acme.algafood.api.ResourceUriHelper;
 import com.acme.algafood.api.assembler.CidadeModelAssembler;
@@ -62,7 +57,12 @@ public class CidadeController implements CidadeControllerOpenApi {
 
     @GetMapping(path = "/{cidadeId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModel buscar(@PathVariable Long cidadeId) {
-        return cidadeModelAssembler.toModel(cidadeService.buscarOuFalhar(cidadeId));
+        Cidade cidade = cidadeService.buscarOuFalhar(cidadeId);
+        CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
+        cidadeModel.add(Link.of("http://localhost:8080/cidades/" + cidadeId));
+        cidadeModel.add(Link.of("http://localhost:8080/cidades/", "cidades"));
+        cidadeModel.getEstado().add(Link.of("http://localhost:8080/estados/1"));
+        return cidadeModel;
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
