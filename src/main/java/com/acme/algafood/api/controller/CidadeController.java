@@ -5,7 +5,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
+import org.springframework.hateoas.CollectionModel;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,18 +53,14 @@ public class CidadeController implements CidadeControllerOpenApi {
     private CidadeInputDisassembler cidadeInputDisassembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<CidadeModel> listar() {
+    public CollectionModel<CidadeModel> listar() {
         return cidadeModelAssembler.toCollectionModel(cidadeRepository.findAll());
     }
 
     @GetMapping(path = "/{cidadeId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModel buscar(@PathVariable Long cidadeId) {
         Cidade cidade = cidadeService.buscarOuFalhar(cidadeId);
-        CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
-        cidadeModel.add(Link.of("http://localhost:8080/cidades/" + cidadeId));
-        cidadeModel.add(Link.of("http://localhost:8080/cidades/", "cidades"));
-        cidadeModel.getEstado().add(Link.of("http://localhost:8080/estados/1"));
-        return cidadeModel;
+        return cidadeModelAssembler.toModel(cidade);
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
