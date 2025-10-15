@@ -30,7 +30,7 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     private UsuarioModelAssembler usuarioModelAssembler;
 
     @GetMapping
-    public List<UsuarioModel> listar(@PathVariable Long restauranteId) {
+    public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
         return usuarioModelAssembler.toCollectionModel(restaurante.getResponsaveis());
     }

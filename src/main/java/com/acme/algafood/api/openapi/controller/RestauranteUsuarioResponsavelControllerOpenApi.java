@@ -16,25 +16,26 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @Api(tags = "Restaurantes")
 public interface RestauranteUsuarioResponsavelControllerOpenApi {
 
-    @ApiOperation("Lista os responsáveis pelo restaurante")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Exibe a lista de reponsáveis pelo restaurante", content = @Content(schema = @Schema(implementation = Problem.class))),
-    })
-    public List<UsuarioModel> listar(@ApiParam(value = "ID do restaurante", required = true) Long restauranteId);
+        @ApiOperation("Lista os responsáveis pelo restaurante")
+        @ApiResponses({
+                        @ApiResponse(responseCode = "200", description = "Exibe a lista de reponsáveis pelo restaurante", content = @Content(schema = @Schema(implementation = Problem.class))),
+        })
+        public CollectionModel<UsuarioModel> listar(
+                        @ApiParam(value = "ID do restaurante", required = true) Long restauranteId);
 
-    @ApiOperation("Associa um responsável ao restaurante")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Responsável associada", content = @Content(schema = @Schema(implementation = Problem.class))),
-            @ApiResponse(responseCode = "404", description = "Responsável não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-    })
-    public void associar(@ApiParam(value = "ID do restaurante", required = true) Long restauranteId,
-            @ApiParam(value = "ID do usuario", required = true) Long usuarioId);
+        @ApiOperation("Associa um responsável ao restaurante")
+        @ApiResponses({
+                        @ApiResponse(responseCode = "204", description = "Responsável associada", content = @Content(schema = @Schema(implementation = Problem.class))),
+                        @ApiResponse(responseCode = "404", description = "Responsável não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
+        })
+        public void associar(@ApiParam(value = "ID do restaurante", required = true) Long restauranteId,
+                        @ApiParam(value = "ID do usuario", required = true) Long usuarioId);
 
-    @ApiOperation("Desassocia um responsável ao restaurante")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Responsável associado", content = @Content(schema = @Schema(implementation = Problem.class))),
-            @ApiResponse(responseCode = "404", description = "Responsável não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-    })
-    public void desassociar(@ApiParam(value = "ID do restaurante", required = true) Long restauranteId,
-            @ApiParam(value = "ID do usuario", required = true) Long usuarioId);
+        @ApiOperation("Desassocia um responsável ao restaurante")
+        @ApiResponses({
+                        @ApiResponse(responseCode = "204", description = "Responsável associado", content = @Content(schema = @Schema(implementation = Problem.class))),
+                        @ApiResponse(responseCode = "404", description = "Responsável não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
+        })
+        public void desassociar(@ApiParam(value = "ID do restaurante", required = true) Long restauranteId,
+                        @ApiParam(value = "ID do usuario", required = true) Long usuarioId);
 }
