@@ -1,7 +1,7 @@
 package com.acme.algafood.api.openapi.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.acme.algafood.api.exceptionhandler.Problem;
@@ -28,7 +28,7 @@ public interface PedidoControllerOpenApi {
                         @ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula", name = "campos", paramType = "query", type = "string")
         })
         @GetMapping
-        Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, Pageable pageable);
+        PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, Pageable pageable);
 
         @ApiOperation("Busca um pedido por código")
         @ApiResponses({

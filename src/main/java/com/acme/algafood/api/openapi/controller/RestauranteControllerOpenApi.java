@@ -2,6 +2,8 @@ package com.acme.algafood.api.openapi.controller;
 
 import java.util.List;
 
+import org.springframework.hateoas.CollectionModel;
+
 import com.acme.algafood.api.exceptionhandler.Problem;
 import com.acme.algafood.api.model.request.RestauranteInput;
 import com.acme.algafood.api.model.response.RestauranteModel;
@@ -18,7 +20,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 public interface RestauranteControllerOpenApi {
 
         @ApiOperation(value = "Lista os restaurantes")
-        List<RestauranteModel> listar();
+        CollectionModel<RestauranteModel> listar();
 
         @ApiOperation("Busca um restaurante por ID")
         @ApiResponses({
