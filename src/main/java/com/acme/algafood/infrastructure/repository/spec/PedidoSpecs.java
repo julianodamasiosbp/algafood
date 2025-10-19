@@ -1,15 +1,13 @@
 package com.acme.algafood.infrastructure.repository.spec;
 
-import com.acme.algafood.domain.filter.PedidoFilter;
-import com.acme.algafood.domain.model.Pedido;
-import com.acme.algafood.domain.model.Restaurante;
-
-import org.springframework.data.jpa.domain.Specification;
-
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import javax.persistence.criteria.Predicate;
+
+import org.springframework.data.jpa.domain.Specification;
+
+import com.acme.algafood.domain.filter.PedidoFilter;
+import com.acme.algafood.domain.model.Pedido;
 
 public class PedidoSpecs {
 

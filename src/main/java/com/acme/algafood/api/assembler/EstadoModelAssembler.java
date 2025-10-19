@@ -8,6 +8,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.acme.algafood.api.AlgafoodLinks;
 import com.acme.algafood.api.controller.EstadoController;
 import com.acme.algafood.api.model.response.EstadoModel;
 import com.acme.algafood.domain.model.Estado;
@@ -22,14 +23,14 @@ public class EstadoModelAssembler extends RepresentationModelAssemblerSupport<Es
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private AlgafoodLinks algaLinks;
+
     public EstadoModel toModel(Estado estado) {
-        EstadoModel estadoModel = modelMapper.map(estado, EstadoModel.class);
+        EstadoModel estadoModel = createModelWithId(estado.getId(), estado);
+        modelMapper.map(estado, estadoModel);
 
-        estadoModel.add(linkTo(EstadoController.class)
-                .slash(estadoModel.getId()).withSelfRel());
-
-        estadoModel.add(linkTo(EstadoController.class)
-                .withRel("estados"));
+        estadoModel.add(algaLinks.linkToEstados("estados"));
 
         return estadoModel;
     }

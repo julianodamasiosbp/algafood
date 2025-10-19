@@ -27,6 +27,7 @@ import com.acme.algafood.api.model.request.PedidoInput;
 import com.acme.algafood.api.model.response.PedidoModel;
 import com.acme.algafood.api.model.response.PedidoResumoModel;
 import com.acme.algafood.api.openapi.controller.PedidoControllerOpenApi;
+import com.acme.algafood.core.data.PageWrapper;
 import com.acme.algafood.core.data.PageableTranslator;
 import com.acme.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.acme.algafood.domain.exception.NegocioException;
@@ -36,6 +37,7 @@ import com.acme.algafood.domain.model.Usuario;
 import com.acme.algafood.domain.repository.PedidoRepository;
 import com.acme.algafood.domain.service.EmissaoPedidoService;
 import com.acme.algafood.domain.service.PedidoService;
+import com.acme.algafood.infrastructure.repository.spec.PedidoSpecs;
 
 @RestController
 @RequestMapping(path = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -64,13 +66,14 @@ public class PedidoController implements PedidoControllerOpenApi {
 
     @GetMapping
     public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
+        Pageable pageableTraduzido = traduzirPageable(pageable);
 
-        Page<Pedido> pedidosPage = pedidoRepository.findAll(pageable);
+        Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageableTraduzido);
 
-        PagedModel<PedidoResumoModel> pedidosPagedModel = pagedResourcesAssembler.toModel(pedidosPage,
+        pedidosPage = new PageWrapper<>(pedidosPage, pageable);
+
+        return pagedResourcesAssembler.toModel(pedidosPage,
                 pedidoResumoModelAssembler);
-
-        return pedidosPagedModel;
     }
 
     @GetMapping("/{codigoPedido}")
@@ -99,15 +102,30 @@ public class PedidoController implements PedidoControllerOpenApi {
     private Pageable traduzirPageable(Pageable apiPageable) {
         var mapeamento = Map.of(
                 "codigo", "codigo",
-                "restaurante.nome", "restaurante.nome",
-                "nomeCliente", "cliente.nome",
                 "subtotal", "subtotal",
-                "restauranteId", "restaurante.id",
                 "taxaFrete", "taxaFrete",
-                "valorTotal", "valorTotal");
+                "valorTotal", "valorTotal",
+                "dataCriacao", "dataCriacao",
+                "nomerestaurante", "restaurante.nome",
+                "restaurante.id", "restaurante.id",
+                "cliente.id", "cliente.id",
+                "cliente.nome", "cliente.nome");
 
         return PageableTranslator.translate(apiPageable, mapeamento);
     }
+
+    // @GetMapping
+    // public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro,
+    // @PageableDefault(size = 10) Pageable pageable) {
+
+    // Page<Pedido> pedidosPage = pedidoRepository.findAll(pageable);
+
+    // PagedModel<PedidoResumoModel> pedidosPagedModel =
+    // pagedResourcesAssembler.toModel(pedidosPage,
+    // pedidoResumoModelAssembler);
+
+    // return pedidosPagedModel;
+    // }
 
     // @GetMapping
     // public MappingJacksonValue listar(@RequestParam(required = false) String

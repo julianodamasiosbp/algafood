@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.acme.algafood.api.AlgafoodLinks;
 import com.acme.algafood.api.controller.PedidoController;
 import com.acme.algafood.api.controller.RestauranteController;
 import com.acme.algafood.api.controller.UsuarioController;
@@ -19,26 +20,26 @@ public class PedidoResumoModelAssembler extends RepresentationModelAssemblerSupp
 
     public PedidoResumoModelAssembler() {
         super(PedidoController.class, PedidoResumoModel.class);
-        // TODO Auto-generated constructor stub
     }
 
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private AlgafoodLinks algaLinks;
+
     public PedidoResumoModel toModel(Pedido pedido) {
-        PedidoResumoModel pedidoResumoModel = createModelWithId(pedido.getCodigo(), pedido);
+        PedidoResumoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
+        modelMapper.map(pedido, pedidoModel);
 
-        modelMapper.map(pedido, pedidoResumoModel);
+        pedidoModel.add(algaLinks.linkToPedidos());
 
-        pedidoResumoModel.add(linkTo(PedidoController.class).withRel("pedidos"));
+        pedidoModel.getRestaurante().add(
+                algaLinks.linkToRestaurante(pedido.getRestaurante().getId()));
 
-        pedidoResumoModel.getRestaurante().add(linkTo(methodOn(RestauranteController.class)
-                .buscar(pedido.getRestaurante().getId())).withSelfRel());
+        pedidoModel.getCliente().add(algaLinks.linkToUsuario(pedido.getCliente().getId()));
 
-        pedidoResumoModel.getCliente().add(linkTo(methodOn(UsuarioController.class)
-                .buscar(pedido.getCliente().getId())).withSelfRel());
-
-        return pedidoResumoModel;
+        return pedidoModel;
     }
 
     // public List<PedidoResumoModel> toCollectionModel(List<Pedido> pedidos) {
