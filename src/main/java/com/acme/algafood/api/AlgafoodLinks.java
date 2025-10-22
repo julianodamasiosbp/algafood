@@ -18,6 +18,7 @@ import com.acme.algafood.api.controller.FluxoPedidoController;
 import com.acme.algafood.api.controller.FormaPagamentoController;
 import com.acme.algafood.api.controller.PedidoController;
 import com.acme.algafood.api.controller.RestauranteController;
+import com.acme.algafood.api.controller.RestauranteFormaPagamentoController;
 import com.acme.algafood.api.controller.RestauranteProdutoController;
 import com.acme.algafood.api.controller.RestauranteUsuarioResponsavelController;
 import com.acme.algafood.api.controller.UsuarioController;
