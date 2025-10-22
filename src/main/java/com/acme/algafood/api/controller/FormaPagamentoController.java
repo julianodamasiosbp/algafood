@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -48,14 +49,8 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
     @Autowired
     private FormaPagamentoInputDisassembler formaPagamentoInputDisassembler;
 
-    // @GetMapping
-    // public List<FormaPagamentoModel> listar() {
-    // return
-    // formaPagamentoModelAssembler.toCollectionModel(formaPagamentoRepository.findAll());
-    // }
-
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request) {
+    public ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 
         String eTag = "0";
@@ -71,19 +66,13 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
         }
 
         List<FormaPagamento> formaPagamentos = formaPagamentoRepository.findAll();
-        List<FormaPagamentoModel> formasPagamentosModel = formaPagamentoModelAssembler
+        CollectionModel<FormaPagamentoModel> formasPagamentosModel = formaPagamentoModelAssembler
                 .toCollectionModel(formaPagamentos);
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(20, TimeUnit.SECONDS).cachePublic())
                 .eTag(eTag)
                 .body(formasPagamentosModel);
     }
-
-    // @GetMapping("/{formaPagamentoId}")
-    // public FormaPagamentoModel buscar(@PathVariable Long formaPagamentoId) {
-    // return
-    // formaPagamentoModelAssembler.toModel(formaPagamentoService.buscarOuFalhar(formaPagamentoId));
-    // }
 
     @GetMapping(path = "/{formaPagamentoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FormaPagamentoModel> buscar(@PathVariable Long formaPagamentoId, ServletWebRequest request) {
@@ -134,4 +123,16 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
     public void remover(@PathVariable Long formaPagamentoId) {
         formaPagamentoService.excluir(formaPagamentoId);
     }
+
+    // @GetMapping
+    // public List<FormaPagamentoModel> listar() {
+    // return
+    // formaPagamentoModelAssembler.toCollectionModel(formaPagamentoRepository.findAll());
+    // }
+
+    // @GetMapping("/{formaPagamentoId}")
+    // public FormaPagamentoModel buscar(@PathVariable Long formaPagamentoId) {
+    // return
+    // formaPagamentoModelAssembler.toModel(formaPagamentoService.buscarOuFalhar(formaPagamentoId));
+    // }
 }

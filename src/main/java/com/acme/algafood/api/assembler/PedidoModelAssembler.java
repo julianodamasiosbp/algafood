@@ -26,26 +26,28 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
         @Autowired
         private AlgafoodLinks algaLinks;
 
+        @Override
         public PedidoModel toModel(Pedido pedido) {
                 PedidoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
-
                 modelMapper.map(pedido, pedidoModel);
 
-                pedidoModel.add(algaLinks.linkToPedidos());
+                pedidoModel.add(algaLinks.linkToPedidos("pedidos"));
 
                 if (pedido.podeSerConfirmado()) {
                         pedidoModel.add(algaLinks.linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
-                }
-
-                if (pedido.podeSerEntrege()) {
-                        pedidoModel.add(algaLinks.linkToEntregaPedido(pedido.getCodigo(), "entregar"));
                 }
 
                 if (pedido.podeSerCancelado()) {
                         pedidoModel.add(algaLinks.linkToCancelamentoPedido(pedido.getCodigo(), "cancelar"));
                 }
 
-                pedidoModel.getRestaurante().add(algaLinks.linkToRestaurante(pedido.getRestaurante().getId()));
+                if (pedido.podeSerEntregue()) {
+                        pedidoModel.add(algaLinks.linkToEntregaPedido(pedido.getCodigo(), "entregar"));
+                }
+
+                pedidoModel.getRestaurante().add(
+                                algaLinks.linkToRestaurante(pedido.getRestaurante().getId()));
+
                 pedidoModel.getCliente().add(
                                 algaLinks.linkToUsuario(pedido.getCliente().getId()));
 
@@ -61,12 +63,6 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
                 });
 
                 return pedidoModel;
-        }
-
-        public List<PedidoModel> toCollectionModel(List<Pedido> pedidos) {
-                return pedidos.stream()
-                                .map(pedido -> toModel(pedido))
-                                .collect(Collectors.toList());
         }
 
 }
