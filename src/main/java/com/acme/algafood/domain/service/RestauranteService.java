@@ -92,13 +92,7 @@ public class RestauranteService {
 	}
 
 	@Transactional
-	public void abrirRestaurante(Long restauranteId) {
-		Restaurante restaurante = buscarOuFalhar(restauranteId);
-		restaurante.iniciarAtividades();
-	}
-
-	@Transactional
-	public void fecharRestaurante(Long restauranteId) {
+	public void fechar(Long restauranteId) {
 		Restaurante restaurante = buscarOuFalhar(restauranteId);
 		restaurante.encerrarAtividades();
 	}

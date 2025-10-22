@@ -5,9 +5,6 @@ import java.math.BigDecimal;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-import com.acme.algafood.api.model.view.RestauranteView;
-import com.fasterxml.jackson.annotation.JsonView;
-
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;

@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 import com.acme.algafood.api.AlgafoodLinks;
 import com.acme.algafood.api.controller.CidadeController;
 import com.acme.algafood.api.model.response.CidadeModel;
+import com.acme.algafood.api.model.response.UsuarioModel;
 import com.acme.algafood.domain.model.Cidade;
+import com.acme.algafood.domain.model.Usuario;
 
 @Component
 public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Cidade, CidadeModel> {
@@ -42,7 +44,8 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
 
     @Override
     public CollectionModel<CidadeModel> toCollectionModel(Iterable<? extends Cidade> entities) {
-        return super.toCollectionModel(entities).add(linkTo(CidadeController.class).withSelfRel());
+        return super.toCollectionModel(entities)
+                .add(algaLinks.linkToCidades());
     }
 
     // public List<CidadeModel> toCollectionModel(List<Cidade> cidades) {

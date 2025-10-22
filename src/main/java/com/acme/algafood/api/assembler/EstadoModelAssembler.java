@@ -35,9 +35,10 @@ public class EstadoModelAssembler extends RepresentationModelAssemblerSupport<Es
         return estadoModel;
     }
 
+    @Override
     public CollectionModel<EstadoModel> toCollectionModel(Iterable<? extends Estado> entities) {
-        return super.toCollectionModel(entities).add(linkTo(EstadoController.class).withSelfRel());
-
+        return super.toCollectionModel(entities)
+                .add(algaLinks.linkToEstados());
     }
 
 }
