@@ -97,13 +97,13 @@ public class AlgafoodLinks {
         return linkToGruposUsuario(usuarioId, IanaLinkRelations.SELF.value());
     }
 
-    public Link linkToResponsaveisRestaurante(Long restauranteId, String rel) {
+    public Link linkToRestauranteResponsaveis(Long restauranteId, String rel) {
         return linkTo(methodOn(RestauranteUsuarioResponsavelController.class)
                 .listar(restauranteId)).withRel(rel);
     }
 
-    public Link linkToResponsaveisRestaurante(Long restauranteId) {
-        return linkToResponsaveisRestaurante(restauranteId, IanaLinkRelations.SELF.value());
+    public Link linkToRestauranteResponsaveis(Long restauranteId) {
+        return linkToRestauranteResponsaveis(restauranteId, IanaLinkRelations.SELF.value());
     }
 
     public Link linkToFormaPagamento(Long formaPagamentoId, String rel) {
@@ -182,6 +182,11 @@ public class AlgafoodLinks {
                 .listar(restauranteId)).withRel(rel);
     }
 
+    public Link linkToRestauranteFormasPagamentoAssociacao(Long restauranteId, String rel) {
+        return linkTo(methodOn(RestauranteFormaPagamentoController.class)
+                .associar(restauranteId, null)).withRel(rel);
+    }
+
     public Link linkToRestauranteFormasPagamentoDesassociacao(Long restauranteId, Long formaPagamentoId, String rel) {
         return linkTo(methodOn(RestauranteFormaPagamentoController.class)
                 .desassociar(restauranteId, formaPagamentoId)).withRel(rel);
@@ -226,6 +231,18 @@ public class AlgafoodLinks {
 
     public Link linkToFormasPagamento() {
         return linkToFormasPagamento(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToRestauranteResponsavelDesassociacao(
+            Long restauranteId, Long usuarioId, String rel) {
+
+        return linkTo(methodOn(RestauranteUsuarioResponsavelController.class)
+                .desassociar(restauranteId, usuarioId)).withRel(rel);
+    }
+
+    public Link linkToRestauranteResponsavelAssociacao(Long restauranteId, String rel) {
+        return linkTo(methodOn(RestauranteUsuarioResponsavelController.class)
+                .associar(restauranteId, null)).withRel(rel);
     }
 
 }

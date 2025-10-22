@@ -41,7 +41,7 @@ public class RestauranteModelAssembler
                 restauranteModel.add(algaLinks.linkToRestauranteFormasPagamento(restaurante.getId(),
                                 "formas-pagamento"));
 
-                restauranteModel.add(algaLinks.linkToResponsaveisRestaurante(restaurante.getId(),
+                restauranteModel.add(algaLinks.linkToRestauranteResponsaveis(restaurante.getId(),
                                 "responsaveis"));
 
                 if (restaurante.ativacaoPermitida()) {

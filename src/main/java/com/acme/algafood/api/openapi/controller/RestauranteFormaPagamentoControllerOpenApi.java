@@ -31,7 +31,7 @@ public interface RestauranteFormaPagamentoControllerOpenApi {
                         @ApiResponse(responseCode = "204", description = "Forma de pagamento associada", content = @Content(schema = @Schema(implementation = Problem.class))),
                         @ApiResponse(responseCode = "404", description = "Forma de pagamento não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
         })
-        public void associar(@ApiParam(value = "ID do restaurante", required = true) Long restauranteId,
+        public ResponseEntity<Void> associar(@ApiParam(value = "ID do restaurante", required = true) Long restauranteId,
                         @ApiParam(value = "ID da forma de pagamente", required = true) Long formaPagamentoId);
 
         @ApiOperation("Desassocia uma forma de pagamento ao restaurante")

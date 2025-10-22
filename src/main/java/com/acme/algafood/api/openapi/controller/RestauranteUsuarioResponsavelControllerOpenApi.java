@@ -1,6 +1,7 @@
 package com.acme.algafood.api.openapi.controller;
 
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import com.acme.algafood.api.exceptionhandler.Problem;
 import com.acme.algafood.api.model.response.UsuarioModel;
@@ -28,7 +29,7 @@ public interface RestauranteUsuarioResponsavelControllerOpenApi {
                         @ApiResponse(responseCode = "204", description = "Responsável associada", content = @Content(schema = @Schema(implementation = Problem.class))),
                         @ApiResponse(responseCode = "404", description = "Responsável não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
         })
-        public void associar(@ApiParam(value = "ID do restaurante", required = true) Long restauranteId,
+        public ResponseEntity<Void> associar(@ApiParam(value = "ID do restaurante", required = true) Long restauranteId,
                         @ApiParam(value = "ID do usuario", required = true) Long usuarioId);
 
         @ApiOperation("Desassocia um responsável ao restaurante")
@@ -36,6 +37,7 @@ public interface RestauranteUsuarioResponsavelControllerOpenApi {
                         @ApiResponse(responseCode = "204", description = "Responsável associado", content = @Content(schema = @Schema(implementation = Problem.class))),
                         @ApiResponse(responseCode = "404", description = "Responsável não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
         })
-        public void desassociar(@ApiParam(value = "ID do restaurante", required = true) Long restauranteId,
+        public ResponseEntity<Void> desassociar(
+                        @ApiParam(value = "ID do restaurante", required = true) Long restauranteId,
                         @ApiParam(value = "ID do usuario", required = true) Long usuarioId);
 }
