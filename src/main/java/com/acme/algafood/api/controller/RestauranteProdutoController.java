@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.acme.algafood.api.AlgafoodLinks;
 import com.acme.algafood.api.assembler.ProdutoModelAssembler;
 import com.acme.algafood.api.disassembler.ProdutoInputDisassembler;
 import com.acme.algafood.api.model.request.ProdutoInput;
@@ -47,23 +49,27 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     @Autowired
     private ProdutoInputDisassembler produtoInputDisassembler;
 
-    @GetMapping()
-    public List<ProdutoModel> listar(@RequestParam(required = false) boolean incluirInativos,
-            @PathVariable Long restauranteId) {
+    @Autowired
+    private AlgafoodLinks algaLinks;
 
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public CollectionModel<ProdutoModel> listar(@PathVariable Long restauranteId,
+            @RequestParam(required = false, defaultValue = "false") Boolean incluirInativos) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
 
-        List<Produto> todosProdutos;
+        List<Produto> todosProdutos = null;
 
         if (incluirInativos) {
-            todosProdutos = produtoRepository.findByRestaurante(restaurante);
+            todosProdutos = produtoRepository.findTodosByRestaurante(restaurante);
         } else {
             todosProdutos = produtoRepository.findAtivosByRestaurante(restaurante);
         }
 
-        return produtoModelAssembler.toCollectionModel(todosProdutos);
+        return produtoModelAssembler.toCollectionModel(todosProdutos)
+                .add(algaLinks.linkToProdutos(restauranteId));
     }
 
+    @Override
     @GetMapping("/{produtoId}")
     public ProdutoModel buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         Produto produto = produtoService.buscarOuFalhar(restauranteId, produtoId);
@@ -71,6 +77,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return produtoModelAssembler.toModel(produto);
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProdutoModel adicionar(@PathVariable Long restauranteId,
@@ -85,6 +92,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return produtoModelAssembler.toModel(produto);
     }
 
+    @Override
     @PutMapping("/{produtoId}")
     public ProdutoModel atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId,
             @RequestBody @Valid ProdutoInput produtoInput) {
