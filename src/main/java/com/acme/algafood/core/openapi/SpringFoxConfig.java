@@ -6,7 +6,6 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLStreamHandler;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -23,7 +22,6 @@ import org.springframework.web.context.request.ServletWebRequest;
 
 import com.acme.algafood.api.exceptionhandler.Problem;
 import com.acme.algafood.api.model.response.CozinhaModel;
-import com.acme.algafood.api.model.response.PedidoModel;
 import com.acme.algafood.api.model.response.PedidoResumoModel;
 import com.acme.algafood.api.openapi.model.CozinhasModelOpenApi;
 import com.acme.algafood.api.openapi.model.PageableModelOpenApi;
@@ -36,13 +34,10 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.schema.AlternateTypeRules;
-import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
-import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.Response;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
@@ -96,7 +91,8 @@ public class SpringFoxConfig {
                                                 new Tag("Estados", "Gerencia os estados"),
                                                 new Tag("Produtos", "Gerencia os produtos de restaurantes"),
                                                 new Tag("Usuários", "Gerencia os usuários"),
-                                                new Tag("Estatísticas", "Estatísticas da AlgaFood"));
+                                                new Tag("Estatísticas", "Estatísticas da AlgaFood"),
+                                                new Tag("Permissões", "Gerencia as permissões"));
         }
 
         public ApiInfo apiInfo() {
