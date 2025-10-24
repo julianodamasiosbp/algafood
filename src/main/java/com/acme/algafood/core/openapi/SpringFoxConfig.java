@@ -31,6 +31,7 @@ import com.acme.algafood.api.model.response.FormaPagamentoModel;
 import com.acme.algafood.api.model.response.GrupoModel;
 import com.acme.algafood.api.model.response.PedidoResumoModel;
 import com.acme.algafood.api.model.response.PermissaoModel;
+import com.acme.algafood.api.model.response.ProdutoModel;
 import com.acme.algafood.api.openapi.model.CidadesModelOpenApi;
 import com.acme.algafood.api.openapi.model.CozinhasModelOpenApi;
 import com.acme.algafood.api.openapi.model.EstadosModelOpenApi;
@@ -40,6 +41,7 @@ import com.acme.algafood.api.openapi.model.LinksModelOpenApi;
 import com.acme.algafood.api.openapi.model.PageableModelOpenApi;
 import com.acme.algafood.api.openapi.model.PedidosResumoModelOpenApi;
 import com.acme.algafood.api.openapi.model.PermissoesModelOpenApi;
+import com.acme.algafood.api.openapi.model.ProdutosModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -99,6 +101,12 @@ public class SpringFoxConfig {
                                 .alternateTypeRules(AlternateTypeRules.newRule(
                                                 typeResolver.resolve(CollectionModel.class, PermissaoModel.class),
                                                 PermissoesModelOpenApi.class))
+                                .alternateTypeRules(AlternateTypeRules.newRule(
+                                                typeResolver.resolve(PagedModel.class, PedidoResumoModel.class),
+                                                PedidosResumoModelOpenApi.class))
+                                .alternateTypeRules(AlternateTypeRules.newRule(
+                                                typeResolver.resolve(CollectionModel.class, ProdutoModel.class),
+                                                ProdutosModelOpenApi.class))
                                 .apiInfo(apiInfo())
                                 .tags(
                                                 new Tag("Cidades", "Gerencia as cidade"),
