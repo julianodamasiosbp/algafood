@@ -44,6 +44,8 @@ import com.acme.algafood.api.openapi.model.PageableModelOpenApi;
 import com.acme.algafood.api.openapi.model.PedidosResumoModelOpenApi;
 import com.acme.algafood.api.openapi.model.PermissoesModelOpenApi;
 import com.acme.algafood.api.openapi.model.ProdutosModelOpenApi;
+import com.acme.algafood.api.openapi.model.RestaurantesBasicoModelOpenApi;
+import com.acme.algafood.api.openapi.model.UsuariosModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
