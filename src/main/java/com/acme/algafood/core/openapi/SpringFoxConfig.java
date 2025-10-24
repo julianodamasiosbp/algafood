@@ -32,6 +32,8 @@ import com.acme.algafood.api.model.response.GrupoModel;
 import com.acme.algafood.api.model.response.PedidoResumoModel;
 import com.acme.algafood.api.model.response.PermissaoModel;
 import com.acme.algafood.api.model.response.ProdutoModel;
+import com.acme.algafood.api.model.response.RestauranteBasicoModel;
+import com.acme.algafood.api.model.response.UsuarioModel;
 import com.acme.algafood.api.openapi.model.CidadesModelOpenApi;
 import com.acme.algafood.api.openapi.model.CozinhasModelOpenApi;
 import com.acme.algafood.api.openapi.model.EstadosModelOpenApi;
@@ -107,6 +109,13 @@ public class SpringFoxConfig {
                                 .alternateTypeRules(AlternateTypeRules.newRule(
                                                 typeResolver.resolve(CollectionModel.class, ProdutoModel.class),
                                                 ProdutosModelOpenApi.class))
+                                .alternateTypeRules(AlternateTypeRules.newRule(
+                                                typeResolver.resolve(CollectionModel.class,
+                                                                RestauranteBasicoModel.class),
+                                                RestaurantesBasicoModelOpenApi.class))
+                                .alternateTypeRules(AlternateTypeRules.newRule(
+                                                typeResolver.resolve(CollectionModel.class, UsuarioModel.class),
+                                                UsuariosModelOpenApi.class))
                                 .apiInfo(apiInfo())
                                 .tags(
                                                 new Tag("Cidades", "Gerencia as cidade"),

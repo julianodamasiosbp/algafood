@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @Api(tags = "Restaurantes")
 public interface RestauranteControllerOpenApi {
 
-        @ApiOperation(value = "Lista os restaurantes", response = RestauranteBasicoModelOpenApi.class)
+        @ApiOperation(value = "Lista os restaurantes")
         @ApiImplicitParams({
                         @ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome", name = "projecao", paramType = "query", type = "string")
         })
@@ -58,12 +58,14 @@ public interface RestauranteControllerOpenApi {
         @ApiOperation("Ativa um restaurante por ID")
         @ApiResponse(responseCode = "204", description = "Restaurante ativado", content = @Content(schema = @Schema(implementation = Problem.class)))
         @ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-        ResponseEntity<Void> ativar(@ApiParam(value = "ID de um restaurante", example = "1", required = true) Long restauranteId);
+        ResponseEntity<Void> ativar(
+                        @ApiParam(value = "ID de um restaurante", example = "1", required = true) Long restauranteId);
 
         @ApiOperation("Desativa um restaurante por ID")
         @ApiResponse(responseCode = "204", description = "Restaurante desativado", content = @Content(schema = @Schema(implementation = Problem.class)))
         @ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-        ResponseEntity<Void> inativar(@ApiParam(value = "ID de um restaurante", example = "1", required = true) Long restauranteId);
+        ResponseEntity<Void> inativar(
+                        @ApiParam(value = "ID de um restaurante", example = "1", required = true) Long restauranteId);
 
         @ApiOperation("Ativa multiplos restaurantes por IDs")
         @ApiResponse(responseCode = "204", description = "Restaurantes ativados", content = @Content(schema = @Schema(implementation = Problem.class)))
@@ -80,11 +82,13 @@ public interface RestauranteControllerOpenApi {
         @ApiOperation("Fecha um restaurante por ID")
         @ApiResponse(responseCode = "204", description = "Restaurante fechado", content = @Content(schema = @Schema(implementation = Problem.class)))
         @ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-        ResponseEntity<Void> fechar(@ApiParam(value = "ID de um restaurante", example = "1", required = true) Long restauranteId);
+        ResponseEntity<Void> fechar(
+                        @ApiParam(value = "ID de um restaurante", example = "1", required = true) Long restauranteId);
 
         @ApiOperation("Abre um restaurante por ID")
         @ApiResponse(responseCode = "204", description = "Restaurante aberto", content = @Content(schema = @Schema(implementation = Problem.class)))
         @ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
-        ResponseEntity<Void> abrir(@ApiParam(value = "ID de um restaurante", example = "1", required = true) Long restauranteId);
+        ResponseEntity<Void> abrir(
+                        @ApiParam(value = "ID de um restaurante", example = "1", required = true) Long restauranteId);
 
 }
