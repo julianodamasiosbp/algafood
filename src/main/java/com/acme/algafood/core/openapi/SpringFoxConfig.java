@@ -26,12 +26,20 @@ import org.springframework.web.context.request.ServletWebRequest;
 import com.acme.algafood.api.exceptionhandler.Problem;
 import com.acme.algafood.api.model.response.CidadeModel;
 import com.acme.algafood.api.model.response.CozinhaModel;
+import com.acme.algafood.api.model.response.EstadoModel;
+import com.acme.algafood.api.model.response.FormaPagamentoModel;
+import com.acme.algafood.api.model.response.GrupoModel;
 import com.acme.algafood.api.model.response.PedidoResumoModel;
+import com.acme.algafood.api.model.response.PermissaoModel;
 import com.acme.algafood.api.openapi.model.CidadesModelOpenApi;
 import com.acme.algafood.api.openapi.model.CozinhasModelOpenApi;
+import com.acme.algafood.api.openapi.model.EstadosModelOpenApi;
+import com.acme.algafood.api.openapi.model.FormasPagamentoModelOpenApi;
+import com.acme.algafood.api.openapi.model.GruposModelOpenApi;
 import com.acme.algafood.api.openapi.model.LinksModelOpenApi;
 import com.acme.algafood.api.openapi.model.PageableModelOpenApi;
 import com.acme.algafood.api.openapi.model.PedidosResumoModelOpenApi;
+import com.acme.algafood.api.openapi.model.PermissoesModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -74,11 +82,23 @@ public class SpringFoxConfig {
                                 .directModelSubstitute(Links.class, LinksModelOpenApi.class)
                                 .alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(PagedModel.class,
                                                 CozinhaModel.class), CozinhasModelOpenApi.class))
+                                .alternateTypeRules(AlternateTypeRules.newRule(
+                                                typeResolver.resolve(CollectionModel.class, EstadoModel.class),
+                                                EstadosModelOpenApi.class))
                                 .alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Page.class,
                                                 PedidoResumoModel.class), PedidosResumoModelOpenApi.class))
                                 .alternateTypeRules(
                                                 AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class,
                                                                 CidadeModel.class), CidadesModelOpenApi.class))
+                                .alternateTypeRules(AlternateTypeRules.newRule(
+                                                typeResolver.resolve(CollectionModel.class, FormaPagamentoModel.class),
+                                                FormasPagamentoModelOpenApi.class))
+                                .alternateTypeRules(AlternateTypeRules.newRule(
+                                                typeResolver.resolve(CollectionModel.class, GrupoModel.class),
+                                                GruposModelOpenApi.class))
+                                .alternateTypeRules(AlternateTypeRules.newRule(
+                                                typeResolver.resolve(CollectionModel.class, PermissaoModel.class),
+                                                PermissoesModelOpenApi.class))
                                 .apiInfo(apiInfo())
                                 .tags(
                                                 new Tag("Cidades", "Gerencia as cidade"),
