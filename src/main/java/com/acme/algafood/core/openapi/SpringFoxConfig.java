@@ -15,15 +15,21 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Links;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import com.acme.algafood.api.exceptionhandler.Problem;
+import com.acme.algafood.api.model.response.CidadeModel;
 import com.acme.algafood.api.model.response.CozinhaModel;
 import com.acme.algafood.api.model.response.PedidoResumoModel;
+import com.acme.algafood.api.openapi.model.CidadesModelOpenApi;
 import com.acme.algafood.api.openapi.model.CozinhasModelOpenApi;
+import com.acme.algafood.api.openapi.model.LinksModelOpenApi;
 import com.acme.algafood.api.openapi.model.PageableModelOpenApi;
 import com.acme.algafood.api.openapi.model.PedidosResumoModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
@@ -55,31 +61,24 @@ public class SpringFoxConfig {
                                 .select()
                                 .apis(RequestHandlerSelectors.basePackage("com.acme.algafood.api"))
                                 .paths(PathSelectors.any())
-                                // .paths(PathSelectors.ant("/restaurantes/*"))
                                 .build()
                                 .useDefaultResponseMessages(false)
                                 .globalResponses(HttpMethod.GET, globalGetResponseMessages())
                                 .globalResponses(HttpMethod.POST, globalPostResponseMessages())
                                 .globalResponses(HttpMethod.PUT, globalPutResponseMessages())
                                 .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
-                                // .globalRequestParameters(Collections.singletonList(
-                                // new RequestParameterBuilder()
-                                // .name("campos")
-                                // .description("Nomes das propriedades para filtrar na resposta, separados por
-                                // vírgula")
-                                // .in(ParameterType.QUERY)
-                                // .required(true)
-                                // .query(q -> q.model(
-                                // m -> m.scalarModel(ScalarType.STRING)))
-                                // .build()))
                                 .additionalModels(typeResolver.resolve(Problem.class))
                                 .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class,
                                                 URLStreamHandler.class, Resource.class, File.class, InputStream.class)
                                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
-                                .alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Page.class,
+                                .directModelSubstitute(Links.class, LinksModelOpenApi.class)
+                                .alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(PagedModel.class,
                                                 CozinhaModel.class), CozinhasModelOpenApi.class))
                                 .alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Page.class,
                                                 PedidoResumoModel.class), PedidosResumoModelOpenApi.class))
+                                .alternateTypeRules(
+                                                AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class,
+                                                                CidadeModel.class), CidadesModelOpenApi.class))
                                 .apiInfo(apiInfo())
                                 .tags(
                                                 new Tag("Cidades", "Gerencia as cidade"),
