@@ -9,7 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import com.acme.algafood.api.model.request.SenhaInput;
+import com.acme.algafood.api.v1.model.request.SenhaInput;
 import com.acme.algafood.domain.exception.EntidadeEmUsoException;
 import com.acme.algafood.domain.exception.NegocioException;
 import com.acme.algafood.domain.exception.UsuarioNaoEncontradoException;
