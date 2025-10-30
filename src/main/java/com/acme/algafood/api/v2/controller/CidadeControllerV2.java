@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ import com.acme.algafood.api.v2.assembler.CidadeModelAssemblerV2;
 import com.acme.algafood.api.v2.disassembler.CidadeInputDisassemblerV2;
 import com.acme.algafood.api.v2.model.request.CidadeInputV2;
 import com.acme.algafood.api.v2.model.response.CidadeModelV2;
+import com.acme.algafood.api.v2.openapi.controller.CidadeControllerV2OpenApi;
 import com.acme.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.acme.algafood.domain.exception.NegocioException;
 import com.acme.algafood.domain.model.Cidade;
@@ -29,11 +31,12 @@ import com.acme.algafood.domain.repository.CidadeRepository;
 import com.acme.algafood.domain.service.CidadeService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 
 @Api(tags = "Cidades")
 @RequestMapping(path = "/v2/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
-public class CidadeControllerV2 {
+public class CidadeControllerV2 implements CidadeControllerV2OpenApi {
 
     @Autowired
     private CidadeRepository cidadeRepository;
@@ -88,6 +91,12 @@ public class CidadeControllerV2 {
         } catch (EstadoNaoEncontradoException e) {
             throw new NegocioException(e.getMessage(), e);
         }
+    }
+
+    @DeleteMapping("/{cidadeId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@ApiParam("ID de uma cidade") @PathVariable Long cidadeId) {
+        cidadeService.excluir(cidadeId);
     }
 
 }

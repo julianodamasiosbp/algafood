@@ -8,19 +8,16 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-@Relation(collectionRelation = "cidades")
-@ApiModel("CidadeModel")
-@Getter
+@Relation(collectionRelation = "cozinhas")
+@ApiModel("CozinhaModel")
 @Setter
-public class CidadeModelV2 extends RepresentationModel<CidadeModelV2> {
+@Getter
+public class CozinhaModelV2 extends RepresentationModel<CozinhaModelV2> {
 
     @ApiModelProperty(example = "1")
-    private Long idCidade;
+    private Long idCozinha;
 
-    @ApiModelProperty(example = "Uberlândia")
-    private String nomeCidade;
-
-    private Long idEstado;
-    private String nomeEstado;
+    @ApiModelProperty(example = "Brasileira")
+    private String nomeCozinha;
 
 }

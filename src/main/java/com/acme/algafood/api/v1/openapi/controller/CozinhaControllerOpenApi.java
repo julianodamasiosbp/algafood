@@ -1,6 +1,5 @@
 package com.acme.algafood.api.v1.openapi.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 
