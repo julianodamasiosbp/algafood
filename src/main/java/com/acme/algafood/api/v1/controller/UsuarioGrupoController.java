@@ -21,7 +21,7 @@ import com.acme.algafood.domain.model.Usuario;
 import com.acme.algafood.domain.service.UsuarioService;
 
 @RestController
-@RequestMapping(path = "/usuarios/{usuarioId}/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/usuarios/{usuarioId}/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 
     @Autowired

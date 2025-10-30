@@ -25,7 +25,7 @@ import com.acme.algafood.domain.model.Estado;
 import com.acme.algafood.domain.repository.EstadoRepository;
 import com.acme.algafood.domain.service.EstadoService;
 
-@RequestMapping(path = "/estados", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/estados", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
 public class EstadoController implements EstadoControllerOpenApi {
 

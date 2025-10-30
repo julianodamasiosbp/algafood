@@ -30,7 +30,7 @@ import com.acme.algafood.domain.repository.ProdutoRepository;
 import com.acme.algafood.domain.service.ProdutoService;
 import com.acme.algafood.domain.service.RestauranteService;
 
-@RequestMapping(path = "/restaurantes/{restauranteId}/produtos", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/restaurantes/{restauranteId}/produtos", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
 public class RestauranteProdutoController implements RestauranteProdutoControllerOpenApi {
 

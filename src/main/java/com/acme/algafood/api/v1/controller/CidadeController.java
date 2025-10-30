@@ -22,7 +22,6 @@ import com.acme.algafood.api.v1.disassembler.CidadeInputDisassembler;
 import com.acme.algafood.api.v1.model.request.CidadeInput;
 import com.acme.algafood.api.v1.model.response.CidadeModel;
 import com.acme.algafood.api.v1.openapi.controller.CidadeControllerOpenApi;
-import com.acme.algafood.core.web.AlgaMediaTypes;
 import com.acme.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.acme.algafood.domain.exception.NegocioException;
 import com.acme.algafood.domain.model.Cidade;
@@ -33,7 +32,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 
 @Api(tags = "Cidades")
-@RequestMapping(path = "/cidades")
+@RequestMapping(path = "/v1/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
 public class CidadeController implements CidadeControllerOpenApi {
 
@@ -49,18 +48,18 @@ public class CidadeController implements CidadeControllerOpenApi {
     @Autowired
     private CidadeInputDisassembler cidadeInputDisassembler;
 
-    @GetMapping(produces = AlgaMediaTypes.V1_APPLICATION_JSON_VALUE)
+    @GetMapping()
     public CollectionModel<CidadeModel> listar() {
         return cidadeModelAssembler.toCollectionModel(cidadeRepository.findAll());
     }
 
-    @GetMapping(path = "/{cidadeId}", produces = AlgaMediaTypes.V1_APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{cidadeId}")
     public CidadeModel buscar(@PathVariable Long cidadeId) {
         Cidade cidade = cidadeService.buscarOuFalhar(cidadeId);
         return cidadeModelAssembler.toModel(cidade);
     }
 
-    @PostMapping(produces = AlgaMediaTypes.V1_APPLICATION_JSON_VALUE)
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeModel adicionar(
             @RequestBody @Valid CidadeInput cidadeInput) {
@@ -74,7 +73,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
-    @PutMapping(path = "/{cidadeId}", produces = AlgaMediaTypes.V1_APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{cidadeId}")
     public CidadeModel atualizar(@PathVariable @Valid Long cidadeId,
             @RequestBody CidadeInput cidadeInput) {
         Cidade cidadeAtual = cidadeService.buscarOuFalhar(cidadeId);

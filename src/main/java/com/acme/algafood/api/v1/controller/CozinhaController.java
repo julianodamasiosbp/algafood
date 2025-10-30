@@ -32,7 +32,7 @@ import com.acme.algafood.domain.service.CozinhaService;
 //@Controller
 //@ResponseBody
 @RestController
-@RequestMapping(path = "/cozinhas")
+@RequestMapping(path = "/v1/cozinhas")
 public class CozinhaController implements CozinhaControllerOpenApi {
 
     @Autowired
