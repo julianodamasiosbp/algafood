@@ -2,6 +2,8 @@ package com.acme.algafood.api.v1.controller;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,8 +31,11 @@ import com.acme.algafood.domain.model.Cozinha;
 import com.acme.algafood.domain.repository.CozinhaRepository;
 import com.acme.algafood.domain.service.CozinhaService;
 
+import lombok.extern.slf4j.Slf4j;
+
 //@Controller
 //@ResponseBody
+@Slf4j(topic = "CozinhaController")
 @RestController
 @RequestMapping(path = "/v1/cozinhas")
 public class CozinhaController implements CozinhaControllerOpenApi {
@@ -52,6 +57,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<CozinhaModel> listar(@PageableDefault(size = 10) Pageable pageable) {
+        log.info("Consultando cozinhas...");
         Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
 
         PagedModel<CozinhaModel> cozinhasPagedModel = pagedResourcesAssembler.toModel(cozinhasPage,

@@ -19,6 +19,7 @@
         <jasperreports.version>7.0.2</jasperreports.version>
         <aws-java-sdk-s3.version>1.12.336</aws-java-sdk-s3.version>
         <spring-fox.version>3.0.0</spring-fox.version>
+        <logback-ext-loggly.version>0.1.5</logback-ext-loggly.version>
     </properties>
     <dependencies>
         <dependency>
@@ -149,9 +150,17 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
 
+        <!-- HATEOAS -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-hateoas</artifactId>
+        </dependency>
+
+        <!-- Loggly -->
+        <dependency>
+            <groupId>org.logback-extensions</groupId>
+            <artifactId>logback-ext-loggly</artifactId>
+            <version>${logback-ext-loggly.version}</version>
         </dependency>
 
     </dependencies>
