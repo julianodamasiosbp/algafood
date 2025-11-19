@@ -65,13 +65,15 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         return usuarioModelAssembler.toModel(usuarioSalvo);
     }
 
+    @Override
     @PutMapping("/{usuarioId}")
     public UsuarioModel atualizar(@PathVariable Long usuarioId,
-            @RequestBody UsuarioSemSenhaInput usuarioSemSenhaInput) {
-        Usuario usuarioSalvo = usuarioService.buscarOuFalhar(usuarioId);
-        usuarioSemSenhaInputDisassembler.copyToDomainObject(usuarioSemSenhaInput, usuarioSalvo);
-        Usuario usuarioAtualizado = usuarioService.salvar(usuarioSalvo);
-        return usuarioModelAssembler.toModel(usuarioAtualizado);
+            @RequestBody @Valid UsuarioInput usuarioInput) {
+        Usuario usuarioAtual = usuarioService.buscarOuFalhar(usuarioId);
+        usuarioInputDisassembler.copyToDomainObject(usuarioInput, usuarioAtual);
+        usuarioAtual = usuarioService.salvar(usuarioAtual);
+
+        return usuarioModelAssembler.toModel(usuarioAtual);
     }
 
     @DeleteMapping("/{usuarioId}")
@@ -80,12 +82,11 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         usuarioService.excluir(usuarioId);
     }
 
+    @Override
     @PutMapping("/{usuarioId}/senha")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void atualizarSenha(@PathVariable Long usuarioId, @RequestBody SenhaInput senhaInput) {
-        Usuario usuarioValidado = usuarioService.validarSenha(senhaInput, usuarioId);
-        usuarioValidado.setSenha(senhaInput.getNovaSenha());
-        usuarioService.salvar(usuarioValidado);
+    public void alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senha) {
+        usuarioService.alterarSenha(usuarioId, senha.getSenhaAtual(), senha.getNovaSenha());
     }
 
 }

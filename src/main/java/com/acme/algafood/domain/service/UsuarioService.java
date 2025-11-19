@@ -7,9 +7,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.acme.algafood.api.v1.model.request.SenhaInput;
 import com.acme.algafood.domain.exception.EntidadeEmUsoException;
 import com.acme.algafood.domain.exception.NegocioException;
 import com.acme.algafood.domain.exception.UsuarioNaoEncontradoException;
@@ -26,6 +26,9 @@ public class UsuarioService {
     @Autowired
     private GrupoService grupoService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private static final String MSG_USUARIO_EM_USO = "Usuário de código %d não pode ser removido, pois está em uso";
 
     public Usuario buscarOuFalhar(Long usuarioId) {
@@ -41,6 +44,10 @@ public class UsuarioService {
         if (usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)) {
             throw new NegocioException(
                     String.format("Já existe um usuário cadastro com o e-mail %s", usuario.getEmail()));
+        }
+
+        if (usuario.isNovo()) {
+            usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         }
         return usuarioRepository.save(usuario);
     }
@@ -61,13 +68,15 @@ public class UsuarioService {
         }
     }
 
-    public Usuario validarSenha(SenhaInput senhaInput, Long usuarioId) {
-        Usuario usuarioSalvo = buscarOuFalhar(usuarioId);
-        if (senhaInput.getSenhaAtual() != usuarioSalvo.getSenha()) {
+    @Transactional
+    public void alterarSenha(Long usuarioId, String senhaAtual, String novaSenha) {
+        Usuario usuario = buscarOuFalhar(usuarioId);
+
+        if (!passwordEncoder.matches(senhaAtual, usuario.getSenha())) {
             throw new NegocioException("Senha atual informada não coincide com a senha do usuário.");
         }
 
-        return usuarioSalvo;
+        usuario.setSenha(passwordEncoder.encode(novaSenha));
     }
 
     @Transactional

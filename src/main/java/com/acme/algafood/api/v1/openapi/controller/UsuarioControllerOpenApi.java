@@ -5,7 +5,6 @@ import org.springframework.hateoas.CollectionModel;
 import com.acme.algafood.api.exceptionhandler.Problem;
 import com.acme.algafood.api.v1.model.request.SenhaInput;
 import com.acme.algafood.api.v1.model.request.UsuarioInput;
-import com.acme.algafood.api.v1.model.request.UsuarioSemSenhaInput;
 import com.acme.algafood.api.v1.model.response.UsuarioModel;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,14 +43,14 @@ public interface UsuarioControllerOpenApi {
         UsuarioModel atualizar(
                         @Parameter(description = "ID do usuário", example = "1", required = true) Long usuarioId,
 
-                        @Parameter(description = "Representação de um usuário com os novos dados", required = true) UsuarioSemSenhaInput usuarioInput);
+                        @Parameter(description = "Representação de um usuário com os novos dados", required = true) UsuarioInput usuarioInput);
 
         @Operation(summary = "Atualiza a senha de um usuário")
         @ApiResponses({
                         @ApiResponse(responseCode = "204", description = "Senha alterada com sucesso"),
                         @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
         })
-        void atualizarSenha(
+        void alterarSenha(
                         @Parameter(description = "ID do usuário", example = "1", required = true) Long usuarioId,
 
                         @Parameter(description = "Representação de uma nova senha", required = true) SenhaInput senha);
