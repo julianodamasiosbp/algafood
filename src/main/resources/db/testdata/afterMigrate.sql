@@ -92,7 +92,23 @@ insert into grupo (nome) values ("Vendedor");
 insert into grupo (nome) values ("Secretaria");
 insert into grupo (nome) values ("Cadastrador");
 
-insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1);
+# Adiciona todas as permissoes no grupo do gerente
+insert into grupo_permissao (grupo_id, permissao_id)
+select 1, id from permissao;
+
+# Adiciona permissoes no grupo do vendedor
+insert into grupo_permissao (grupo_id, permissao_id)
+select 2, id from permissao where nome like 'CONSULTAR_%';
+
+insert into grupo_permissao (grupo_id, permissao_id) values (2, 14);
+
+# Adiciona permissoes no grupo do auxiliar
+insert into grupo_permissao (grupo_id, permissao_id)
+select 3, id from permissao where nome like 'CONSULTAR_%';
+
+# Adiciona permissoes no grupo cadastrador
+insert into grupo_permissao (grupo_id, permissao_id)
+select 4, id from permissao where nome like '%_RESTAURANTES' or nome like '%_PRODUTOS';
 
 insert into usuario (id, nome, email, senha, data_cadastro) values (1, 'Pedro', 'pedro@acme.com', '123', utc_timestamp);
 insert into usuario (id, nome, email, senha, data_cadastro) values (2, 'Maria', 'maria@acme.com', '123', utc_timestamp);
