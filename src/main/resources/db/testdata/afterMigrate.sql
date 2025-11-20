@@ -110,15 +110,15 @@ select 3, id from permissao where nome like 'CONSULTAR_%';
 insert into grupo_permissao (grupo_id, permissao_id)
 select 4, id from permissao where nome like '%_RESTAURANTES' or nome like '%_PRODUTOS';
 
-insert into usuario (id, nome, email, senha, data_cadastro) values (1, 'Pedro', 'pedro@acme.com', '123', utc_timestamp);
-insert into usuario (id, nome, email, senha, data_cadastro) values (2, 'Maria', 'maria@acme.com', '123', utc_timestamp);
-insert into usuario (id, nome, email, senha, data_cadastro) values (3, 'Gabriel', 'gabriel@acme.com', '123', utc_timestamp);
+insert into usuario (id, nome, email, senha, data_cadastro) values (1, 'Pedro', 'pedro@acme.com', '$2a$12$.XsfnCZqm5gFb3EeeY3sGOMFJxh4GeX.XLUA.2mdO2eYjvepOch1S', utc_timestamp);
+insert into usuario (id, nome, email, senha, data_cadastro) values (2, 'Maria', 'maria@acme.com', '$2a$12$.XsfnCZqm5gFb3EeeY3sGOMFJxh4GeX.XLUA.2mdO2eYjvepOch1S', utc_timestamp);
+insert into usuario (id, nome, email, senha, data_cadastro) values (3, 'Gabriel', 'gabriel@acme.com', '$2a$12$.XsfnCZqm5gFb3EeeY3sGOMFJxh4GeX.XLUA.2mdO2eYjvepOch1S', utc_timestamp);
 insert into usuario (id, nome, email, senha, data_cadastro) values (4, 'Julia', 'julia@acme.com', '$2a$12$.XsfnCZqm5gFb3EeeY3sGOMFJxh4GeX.XLUA.2mdO2eYjvepOch1S', utc_timestamp);
 insert into usuario (id, nome, email, senha, data_cadastro) values (5, 'Debora Mendonça', 'setval42+debora@gmail.com', '123', utc_timestamp);
 insert into usuario (id, nome, email, senha, data_cadastro) values (6, 'Carlos Lima', 'setval42+carlos@gmail.com', '123', utc_timestamp);
 
 
-insert into usuario_grupo (usuario_id, grupo_id) values (1, 1), (1, 2), (2, 3), (3, 4), (4, 2);
+insert into usuario_grupo (usuario_id, grupo_id) values (1, 1), (1, 2), (2, 2), (3, 3), (4, 4);
 
 insert into restaurante_usuario_responsavel (restaurante_id, usuario_id) values (1, 1), (2, 3), (3, 4), (4, 4);
 

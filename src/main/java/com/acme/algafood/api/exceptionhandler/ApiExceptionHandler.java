@@ -1,5 +1,6 @@
 package com.acme.algafood.api.exceptionhandler;
 
+import org.springframework.security.access.AccessDeniedException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -300,6 +301,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                                 .build();
 
                 return handleExceptionInternal(ex, problem, headers, status, request);
+        }
+
+        @ExceptionHandler(AccessDeniedException.class)
+        public ResponseEntity<?> handleEntidadeNaoEncontrada(AccessDeniedException ex, WebRequest request) {
+
+                HttpStatus status = HttpStatus.FORBIDDEN;
+                ProblemType problemType = ProblemType.ACESSO_NEGADO;
+                String detail = ex.getMessage();
+
+                Problem problem = createProblemBuilder(status, problemType, detail)
+                                .userMessage("Você não possui permissão para executar essa operação.")
+                                .build();
+
+                return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
         }
 
 }
