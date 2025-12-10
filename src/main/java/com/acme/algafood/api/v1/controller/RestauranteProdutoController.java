@@ -24,6 +24,7 @@ import com.acme.algafood.api.v1.disassembler.ProdutoInputDisassembler;
 import com.acme.algafood.api.v1.model.request.ProdutoInput;
 import com.acme.algafood.api.v1.model.response.ProdutoModel;
 import com.acme.algafood.api.v1.openapi.controller.RestauranteProdutoControllerOpenApi;
+import com.acme.algafood.core.security.CheckSecurity;
 import com.acme.algafood.domain.model.Produto;
 import com.acme.algafood.domain.model.Restaurante;
 import com.acme.algafood.domain.repository.ProdutoRepository;
@@ -52,6 +53,8 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     @Autowired
     private AlgafoodLinks algaLinks;
 
+    @CheckSecurity.Restaurantes.PodeConsultar
+    @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<ProdutoModel> listar(@PathVariable Long restauranteId,
             @RequestParam(required = false, defaultValue = "false") Boolean incluirInativos) {
@@ -77,6 +80,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return produtoModelAssembler.toModel(produto);
     }
 
+    @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -91,7 +95,8 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 
         return produtoModelAssembler.toModel(produto);
     }
-
+    
+    @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @Override
     @PutMapping("/{produtoId}")
     public ProdutoModel atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId,
