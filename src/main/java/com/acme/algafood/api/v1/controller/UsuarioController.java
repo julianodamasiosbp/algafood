@@ -21,9 +21,9 @@ import com.acme.algafood.api.v1.disassembler.UsuarioInputDisassembler;
 import com.acme.algafood.api.v1.disassembler.UsuarioSemSenhaInputDisassembler;
 import com.acme.algafood.api.v1.model.request.SenhaInput;
 import com.acme.algafood.api.v1.model.request.UsuarioInput;
-import com.acme.algafood.api.v1.model.request.UsuarioSemSenhaInput;
 import com.acme.algafood.api.v1.model.response.UsuarioModel;
 import com.acme.algafood.api.v1.openapi.controller.UsuarioControllerOpenApi;
+import com.acme.algafood.core.security.CheckSecurity;
 import com.acme.algafood.domain.model.Usuario;
 import com.acme.algafood.domain.repository.UsuarioRepository;
 import com.acme.algafood.domain.service.UsuarioService;
@@ -47,16 +47,19 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     @Autowired
     private UsuarioSemSenhaInputDisassembler usuarioSemSenhaInputDisassembler;
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping
     public CollectionModel<UsuarioModel> listar() {
         return usuarioModelAssembler.toCollectionModel(usuarioRepository.findAll());
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping("/{usuarioId}")
     public UsuarioModel buscar(@PathVariable Long usuarioId) {
         return usuarioModelAssembler.toModel(usuarioService.buscarOuFalhar(usuarioId));
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioModel adicionar(@RequestBody @Valid UsuarioInput usuarioInput) {
@@ -65,6 +68,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         return usuarioModelAssembler.toModel(usuarioSalvo);
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeAlterarUsuario
     @Override
     @PutMapping("/{usuarioId}")
     public UsuarioModel atualizar(@PathVariable Long usuarioId,
@@ -76,12 +80,14 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         return usuarioModelAssembler.toModel(usuarioAtual);
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @DeleteMapping("/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long usuarioId) {
         usuarioService.excluir(usuarioId);
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeAlterarPropriaSenha
     @Override
     @PutMapping("/{usuarioId}/senha")
     @ResponseStatus(HttpStatus.NO_CONTENT)
