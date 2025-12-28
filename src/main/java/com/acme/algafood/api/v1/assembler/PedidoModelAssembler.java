@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.acme.algafood.api.v1.AlgafoodLinks;
 import com.acme.algafood.api.v1.controller.PedidoController;
 import com.acme.algafood.api.v1.model.response.PedidoModel;
+import com.acme.algafood.core.security.AlgaSecurity;
 import com.acme.algafood.domain.model.Pedido;
 
 @Component
@@ -23,12 +24,17 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
         @Autowired
         private AlgafoodLinks algaLinks;
 
+        @Autowired
+        private AlgaSecurity algaSecurity;
+
         @Override
         public PedidoModel toModel(Pedido pedido) {
                 PedidoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
                 modelMapper.map(pedido, pedidoModel);
 
                 pedidoModel.add(algaLinks.linkToPedidos("pedidos"));
+
+                if(algaSecurity.podeGerenciarPedidos(pedido.getCodigo())) {
 
                 if (pedido.podeSerConfirmado()) {
                         pedidoModel.add(algaLinks.linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
@@ -40,6 +46,7 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
 
                 if (pedido.podeSerEntregue()) {
                         pedidoModel.add(algaLinks.linkToEntregaPedido(pedido.getCodigo(), "entregar"));
+                }
                 }
 
                 pedidoModel.getRestaurante().add(
