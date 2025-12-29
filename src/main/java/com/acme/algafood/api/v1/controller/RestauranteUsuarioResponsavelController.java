@@ -17,6 +17,7 @@ import com.acme.algafood.api.v1.AlgafoodLinks;
 import com.acme.algafood.api.v1.assembler.UsuarioModelAssembler;
 import com.acme.algafood.api.v1.model.response.UsuarioModel;
 import com.acme.algafood.api.v1.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
+import com.acme.algafood.core.security.AlgaSecurity;
 import com.acme.algafood.core.security.CheckSecurity;
 import com.acme.algafood.domain.model.Restaurante;
 import com.acme.algafood.domain.service.RestauranteService;
@@ -34,6 +35,9 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     @Autowired
     private AlgafoodLinks algaLinks;
 
+    @Autowired
+    private AlgaSecurity algaSecurity;
+
     @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @Override
     @GetMapping
@@ -42,14 +46,18 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
 
         CollectionModel<UsuarioModel> usuariosModel = usuarioModelAssembler
                 .toCollectionModel(restaurante.getResponsaveis())
-                .removeLinks()
-                .add(algaLinks.linkToRestauranteResponsaveis(restauranteId))
-                .add(algaLinks.linkToRestauranteResponsavelAssociacao(restauranteId, "associar"));
+                .removeLinks();
 
-        usuariosModel.getContent().stream().forEach(usuarioModel -> {
-            usuarioModel.add(algaLinks.linkToRestauranteResponsavelDesassociacao(
-                    restauranteId, usuarioModel.getId(), "desassociar"));
-        });
+        usuariosModel.add(algaLinks.linkToRestauranteResponsaveis(restauranteId));
+
+        if (algaSecurity.podeGerenciarCadastroRestaurantes()) {
+            usuariosModel.add(algaLinks.linkToRestauranteResponsavelAssociacao(restauranteId, "associar"));
+
+            usuariosModel.getContent().stream().forEach(usuarioModel -> {
+                usuarioModel.add(algaLinks.linkToRestauranteResponsavelDesassociacao(
+                        restauranteId, usuarioModel.getId(), "desassociar"));
+            });
+        }
 
         return usuariosModel;
     }

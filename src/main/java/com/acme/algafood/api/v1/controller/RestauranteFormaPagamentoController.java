@@ -17,6 +17,7 @@ import com.acme.algafood.api.v1.AlgafoodLinks;
 import com.acme.algafood.api.v1.assembler.FormaPagamentoModelAssembler;
 import com.acme.algafood.api.v1.model.response.FormaPagamentoModel;
 import com.acme.algafood.api.v1.openapi.controller.RestauranteFormaPagamentoControllerOpenApi;
+import com.acme.algafood.core.security.AlgaSecurity;
 import com.acme.algafood.core.security.CheckSecurity;
 import com.acme.algafood.domain.model.Restaurante;
 import com.acme.algafood.domain.service.RestauranteService;
@@ -34,6 +35,9 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
     @Autowired
     private AlgafoodLinks algaLinks;
 
+    @Autowired
+    private AlgaSecurity algaSecurity;
+
     @CheckSecurity.Restaurantes.PodeConsultar
     @Override
     @GetMapping
@@ -42,15 +46,19 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 
         CollectionModel<FormaPagamentoModel> formasPagamentoModel = formaPagamentoModelAssembler
                 .toCollectionModel(restaurante.getFormasPagamento())
-                .removeLinks()
-                .add(algaLinks.linkToRestauranteFormasPagamento(restauranteId))
-                .add(algaLinks.linkToRestauranteFormasPagamentoAssociacao(restauranteId, "associar"));
+                .removeLinks();
 
-        formasPagamentoModel.getContent().forEach(formaPagamentoModel -> {
-            formaPagamentoModel.add(algaLinks.linkToRestauranteFormasPagamentoDesassociacao(
-                    restauranteId, formaPagamentoModel.getId(), "desassociar"));
+        formasPagamentoModel.add(algaLinks.linkToRestauranteFormasPagamento(restauranteId));
 
-        });
+        if (algaSecurity.podeGerenciarFuncionamentoRestaurantes(restauranteId)) {
+            formasPagamentoModel.add(algaLinks.linkToRestauranteFormasPagamentoAssociacao(restauranteId, "associar"));
+
+            formasPagamentoModel.getContent().forEach(formaPagamentoModel -> {
+                formaPagamentoModel.add(algaLinks.linkToRestauranteFormasPagamentoDesassociacao(
+                        restauranteId, formaPagamentoModel.getId(), "desassociar"));
+            });
+        }
+
         return formasPagamentoModel;
     }
 
