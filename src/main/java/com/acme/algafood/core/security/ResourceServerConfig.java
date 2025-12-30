@@ -25,9 +25,13 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl(
+                        "http://localhost:8080/oauth/authorize?response_type=code&client_id=foodanalytics&state=abc&redirect_uri=http://localhost:8082",
+                        true)
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/oauth/**").authenticated()
+                .antMatchers("/oauth/**").authenticated()
                 .and()
                 .csrf().disable()
                 .cors()
