@@ -1,8 +1,12 @@
 package com.acme.algafood.core.security.authorizationserver;
 
+import java.security.KeyPair;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +17,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.jose.JwaAlgorithm;
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
@@ -21,6 +26,12 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.RSAKey;
+
 import javax.sql.DataSource;
 
 @SuppressWarnings("deprecation")
@@ -90,9 +101,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         return new CompositeTokenGranter(granters);
     }
 
-    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+    @Bean
+    public JWKSet jwkSet() {
+        RSAKey.Builder builder = new RSAKey.Builder((RSAPublicKey) keyPair().getPublic())
+                .keyUse(KeyUse.SIGNATURE)
+                .algorithm(JWSAlgorithm.RS256)
+                .keyID("algafood-key-id");
+        return new JWKSet(builder.build());
+    }
 
-        var jwtAccessTokenConverter = new JwtAccessTokenConverter();
+    private KeyPair keyPair() {
         // HMAC SHA-256
         // jwtAccessTokenConverter.setSigningKey("esta-sua-chave-deve-ter-32-chars!");
         var keyStorePass = jwtKeyStoreProperties.getPassword();
@@ -102,12 +120,18 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         if (keyPair == null) {
             throw new IllegalStateException("KeyPair é nulo. Verifique alias e keystore. alias=" + keyPairAlias);
         }
+        return keyPair;
+    }
 
-        jwtAccessTokenConverter.setKeyPair(keyPair);
+    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+
+        var jwtAccessTokenConverter = new JwtAccessTokenConverter();
+
+        jwtAccessTokenConverter.setKeyPair(keyPair());
         return jwtAccessTokenConverter;
     }
 
-        // @SuppressWarnings("deprecation")
+    // @SuppressWarnings("deprecation")
     // @Override
     // public void configure(@SuppressWarnings("deprecation") ClientDetailsServiceConfigurer clients) throws Exception {
     //     clients.inMemory()
