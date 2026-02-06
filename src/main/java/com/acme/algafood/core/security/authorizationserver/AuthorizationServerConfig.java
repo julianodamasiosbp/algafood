@@ -20,6 +20,7 @@ import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
+import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -72,6 +73,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints
                 .authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService)
+                .authorizationCodeServices(new JdbcAuthorizationCodeServices(this.dataSource))
                 .reuseRefreshTokens(false)
                 .accessTokenConverter(jwtAccessTokenConverter())
                 .tokenEnhancer(tokenEnhancerChain)
@@ -142,7 +144,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     //             .secret(passwordEncoder.encode("faturamento123"))
     //             .authorizedGrantTypes("client_credentials")
     //             .scopes("READ", "WRITE")
-    //             .and()
+    //             .and()https://banco365-my.sharepoint.com/:v:/r/personal/jonathanmarques_bb_com_br/Documents/Grava%C3%A7%C3%B5es/Homologa%C3%A7%C3%B5es-20260206_133451-Grava%C3%A7%C3%A3o%20de%20Reuni%C3%A3o.mp4?csf=1&web=1&e=MGTGJU&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D
     //             .withClient("foodanalytics")
     //             .secret(passwordEncoder.encode("food123"))
     //             .authorizedGrantTypes("authorization_code")
