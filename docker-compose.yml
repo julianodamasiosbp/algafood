@@ -1,13 +1,56 @@
+
+networks:
+  algafood-network:
+    driver: bridge
+
 services:
-  db:
+  algafood-mysql:
     image: mysql:8.0
-    container_name: mysql
+    container_name: algafood-mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: algadb
     ports:
       - "3306:3306"
+    networks:
+      - algafood-network
     volumes:
       - algafood_data:/var/lib/mysql
+  
+  algafood-redis:
+    image: redis:latest
+    container_name: algafood-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - algafood-network
+  
+  algafood-api:
+    build:
+      context: .
+      args:
+        JAR_FILE: algafood-api-0.0.1-SNAPSHOT.jar
+    image: algafood-api
+    command: ["/wait-for-it.sh", "algafood-mysql:3306", "-t", "30", "--", "java", "-jar", "api.jar"]
+    environment:
+      DB_HOST: algafood-mysql
+      SPRING_SESSION_STORE_TYPE: redis
+      SPRING_REDIS_HOST: algafood-redis
+    networks:
+      - algafood-network
+    depends_on:
+      - algafood-mysql
+  
+  algafood-proxy:
+    build:
+      context: ./ngnix
+    image: algafood-ngnix
+    ports:
+      - "8080:80"
+    networks:
+      - algafood-network
+    depends_on:
+      - algafood-api
 
 volumes:
   algafood_data:
