@@ -1,10 +1,8 @@
 package com.acme.algafood.infrastructure.service.storage;
 
-import java.io.InputStream;
 import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.acme.algafood.core.storage.StorageProperties;
 import com.acme.algafood.domain.service.FotoStorageService;
