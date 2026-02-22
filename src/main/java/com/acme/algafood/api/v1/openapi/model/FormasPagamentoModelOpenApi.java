@@ -6,7 +6,6 @@ import org.springframework.hateoas.Links;
 
 import com.acme.algafood.api.v1.model.response.FormaPagamentoModel;
 
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 public class FormasPagamentoModelOpenApi {
@@ -14,7 +13,6 @@ public class FormasPagamentoModelOpenApi {
     private FormasPagamentoEmbeddedModelOpenApi _embedded;
     private Links _links;
 
-    @ApiModel("FormasPagamentoEmbeddedModel")
     @Data
     public class FormasPagamentoEmbeddedModelOpenApi {
 

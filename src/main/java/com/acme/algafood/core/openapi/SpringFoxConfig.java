@@ -1,4 +1,4 @@
-package com.acme.algafood.core.openapi;
+/* package com.acme.algafood.core.openapi;
 
 import java.io.File;
 import java.io.InputStream;
@@ -301,3 +301,4 @@ public class SpringFoxConfig {
         }
 
 }
+ */

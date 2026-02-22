@@ -136,7 +136,7 @@
 
         <!-- Documentação -->
 
-        <dependency>
+<!--         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-boot-starter</artifactId>
             <version>${spring-fox.version}</version>
@@ -151,7 +151,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-        </dependency>
+        </dependency> -->
 
         <!-- HATEOAS -->
         <dependency>

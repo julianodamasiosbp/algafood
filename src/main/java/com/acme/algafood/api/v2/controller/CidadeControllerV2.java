@@ -30,10 +30,7 @@ import com.acme.algafood.domain.model.Cidade;
 import com.acme.algafood.domain.repository.CidadeRepository;
 import com.acme.algafood.domain.service.CidadeService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
 
-@Api(tags = "Cidades")
 @RequestMapping(path = "/v2/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
 public class CidadeControllerV2 implements CidadeControllerV2OpenApi {
@@ -95,7 +92,7 @@ public class CidadeControllerV2 implements CidadeControllerV2OpenApi {
 
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@ApiParam("ID de uma cidade") @PathVariable Long cidadeId) {
+    public void remover(@PathVariable Long cidadeId) {
         cidadeService.excluir(cidadeId);
     }
 

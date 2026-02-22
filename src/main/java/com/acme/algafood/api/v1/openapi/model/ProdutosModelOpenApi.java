@@ -6,17 +6,14 @@ import org.springframework.hateoas.Links;
 
 import com.acme.algafood.api.v1.model.response.ProdutoModel;
 
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-@ApiModel("ProdutosModel")
 @Data
 public class ProdutosModelOpenApi {
 
     private ProdutosEmbeddedModelOpenApi _embedded;
     private Links _links;
 
-    @ApiModel("ProdutosEmbeddedModel")
     @Data
     public class ProdutosEmbeddedModelOpenApi {
 

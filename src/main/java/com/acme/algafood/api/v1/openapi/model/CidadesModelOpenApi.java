@@ -6,10 +6,8 @@ import org.springframework.hateoas.Links;
 
 import com.acme.algafood.api.v1.model.response.CidadeModel;
 
-import io.swagger.annotations.Api;
 import lombok.Data;
 
-@Api(tags = "CidadesModel")
 @Data
 public class CidadesModelOpenApi {
 
@@ -17,7 +15,6 @@ public class CidadesModelOpenApi {
 
     private Links _links;
 
-    @Api(tags = "CidadesEmbeddedModel")
     @Data
     public class CidadeEmbeddedModelOpenApi {
         private List<CidadeModel> cidades;

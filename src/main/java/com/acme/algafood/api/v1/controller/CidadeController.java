@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,10 +30,6 @@ import com.acme.algafood.domain.model.Cidade;
 import com.acme.algafood.domain.repository.CidadeRepository;
 import com.acme.algafood.domain.service.CidadeService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
-
-@Api(tags = "Cidades")
 @RequestMapping(path = "/v1/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
 public class CidadeController implements CidadeControllerOpenApi {
@@ -96,8 +93,9 @@ public class CidadeController implements CidadeControllerOpenApi {
     @CheckSecurity.Cidades.PodeEditar
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@ApiParam("ID de uma cidade") @PathVariable Long cidadeId) {
+    public  ResponseEntity<Void> remover(@PathVariable Long cidadeId) {
         cidadeService.excluir(cidadeId);
+        return ResponseEntity.noContent().build();
     }
 
 }

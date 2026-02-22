@@ -120,8 +120,9 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluir(@PathVariable Long restauranteId,
+    public ResponseEntity<Void> excluir(@PathVariable Long restauranteId,
             @PathVariable Long produtoId) {
         catalogoFotoProdutoService.excluir(restauranteId, produtoId);
+        return ResponseEntity.noContent().build();
     }
 }
