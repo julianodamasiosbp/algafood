@@ -1,8 +1,8 @@
-FROM amazoncorretto:25-headless
+FROM amazoncorretto:17.0.18-alpine
 
 WORKDIR /app
 
-ARG JAR_FILE
+ARG JAR_FILE=*.jar
 
 COPY target/${JAR_FILE} /app/api.jar
 COPY wait-for-it.sh /wait-for-it.sh
