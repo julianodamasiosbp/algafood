@@ -1,163 +1,59 @@
 package com.acme.algafood.core.security.authorizationserver;
 
-import java.security.KeyPair;
-import java.security.interfaces.RSAPublicKey;
+import java.time.Duration;
 import java.util.Arrays;
-
-import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.CompositeTokenGranter;
-import org.springframework.security.oauth2.provider.TokenGranter;
-import org.springframework.security.oauth2.provider.approval.ApprovalStore;
-import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
-import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
-import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.OAuth2TokenFormat;
+import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
+import org.springframework.security.oauth2.server.authorization.config.TokenSettings;
+import org.springframework.security.web.SecurityFilterChain;
 
-import com.nimbusds.jose.JWSAlgorithm;
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.KeyUse;
-import com.nimbusds.jose.jwk.RSAKey;
-
-@SuppressWarnings("deprecation")
 @Configuration
-@EnableAuthorizationServer
-public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServerConfig {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private JwtKeyStoreProperties jwtKeyStoreProperties;
-
-    @Autowired
-    private DataSource dataSource;
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void configure(@SuppressWarnings("deprecation") ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.jdbc(dataSource);
-    }
-
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        // security.checkTokenAccess("isAuthenticated()");
-        security.checkTokenAccess("permitAll()")
-                .tokenKeyAccess("permitAll()")
-                .allowFormAuthenticationForClients();
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void configure(@SuppressWarnings("deprecation") AuthorizationServerEndpointsConfigurer endpoints)
-            throws Exception {
-
-        var tokenEnhancerChain = new TokenEnhancerChain();
-        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(new JwtCustomClaimsTokenEnhancer(), jwtAccessTokenConverter()));
-
-        endpoints
-                .authenticationManager(authenticationManager)
-                .userDetailsService(userDetailsService)
-                .authorizationCodeServices(new JdbcAuthorizationCodeServices(this.dataSource))
-                .reuseRefreshTokens(false)
-                .accessTokenConverter(jwtAccessTokenConverter())
-                .tokenEnhancer(tokenEnhancerChain)
-                .approvalStore(approvalStore(endpoints.getTokenStore()))
-                .tokenGranter(tokenGranter(endpoints));
-    }
-
-    private ApprovalStore approvalStore(TokenStore tokenStore) {
-
-        var approvalStore = new TokenApprovalStore();
-        approvalStore.setTokenStore(tokenStore);
-        return approvalStore;
-    }
-
-    private TokenGranter tokenGranter(AuthorizationServerEndpointsConfigurer endpoints) {
-        var pkceAuthorizationCodeTokenGranter = new PkceAuthorizationCodeTokenGranter(endpoints.getTokenServices(),
-                endpoints.getAuthorizationCodeServices(), endpoints.getClientDetailsService(),
-                endpoints.getOAuth2RequestFactory());
-
-        var granters = Arrays.asList(
-                pkceAuthorizationCodeTokenGranter, endpoints.getTokenGranter());
-
-        return new CompositeTokenGranter(granters);
+    @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    public SecurityFilterChain authFilterChain(HttpSecurity http) throws Exception {
+        OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
+        return http.build();
     }
 
     @Bean
-    public JWKSet jwkSet() {
-        RSAKey.Builder builder = new RSAKey.Builder((RSAPublicKey) keyPair().getPublic())
-                .keyUse(KeyUse.SIGNATURE)
-                .algorithm(JWSAlgorithm.RS256)
-                .keyID("algafood-key-id");
-        return new JWKSet(builder.build());
+    public ProviderSettings providerSettings(AlgafoodSecurityProperties properties) {
+        return ProviderSettings.builder().issuer(properties.getProvideUrl()).build();
+
     }
 
-    private KeyPair keyPair() {
-        // HMAC SHA-256
-        // jwtAccessTokenConverter.setSigningKey("esta-sua-chave-deve-ter-32-chars!");
-        var keyStorePass = jwtKeyStoreProperties.getPassword();
-        var keyPairAlias = jwtKeyStoreProperties.getKeypairAlias();
-        var keyStoreKeyFactory = new KeyStoreKeyFactory(jwtKeyStoreProperties.getJksLocation(), keyStorePass.toCharArray());
-        var keyPair = keyStoreKeyFactory.getKeyPair(keyPairAlias);
-        if (keyPair == null) {
-            throw new IllegalStateException("KeyPair é nulo. Verifique alias e keystore. alias=" + keyPairAlias);
-        }
-        return keyPair;
+    @Bean
+    public RegisteredClientRepository registeredClientRepository() {
+        RegisteredClient algafoodBackend = RegisteredClient.withId("1")
+                .clientId("algafood-backend")
+                .clientSecret(passwordEncoder.encode("backend123"))
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .scope("READ")
+                .tokenSettings(TokenSettings.builder()
+                    .accessTokenFormat(OAuth2TokenFormat.REFERENCE)
+                    .accessTokenTimeToLive(Duration.ofMinutes(30))
+                    .build())
+                .build();
+        return new InMemoryRegisteredClientRepository(Arrays.asList(algafoodBackend));
     }
-
-    public JwtAccessTokenConverter jwtAccessTokenConverter() {
-
-        var jwtAccessTokenConverter = new JwtAccessTokenConverter();
-
-        jwtAccessTokenConverter.setKeyPair(keyPair());
-        return jwtAccessTokenConverter;
-    }
-
-    // @SuppressWarnings("deprecation")
-    // @Override
-    // public void configure(@SuppressWarnings("deprecation") ClientDetailsServiceConfigurer clients) throws Exception {
-    //     clients.inMemory()
-    //             .withClient("algafood-web")
-    //             .secret(passwordEncoder.encode("web123"))
-    //             .authorizedGrantTypes("password", "refresh_token")
-    //             .scopes("READ", "WRITE")
-    //             .accessTokenValiditySeconds(6 * 60 * 60) // 6 hours
-    //             .refreshTokenValiditySeconds(60 * 24 * 60 * 30) // 60 days
-    //             .and()
-    //             .withClient("faturamento")
-    //             .secret(passwordEncoder.encode("faturamento123"))
-    //             .authorizedGrantTypes("client_credentials")
-    //             .scopes("READ", "WRITE")
-    //             .and()https://banco365-my.sharepoint.com/:v:/r/personal/jonathanmarques_bb_com_br/Documents/Grava%C3%A7%C3%B5es/Homologa%C3%A7%C3%B5es-20260206_133451-Grava%C3%A7%C3%A3o%20de%20Reuni%C3%A3o.mp4?csf=1&web=1&e=MGTGJU&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D
-    //             .withClient("foodanalytics")
-    //             .secret(passwordEncoder.encode("food123"))
-    //             .authorizedGrantTypes("authorization_code")
-    //             .scopes("READ", "WRITE")
-    //             .redirectUris("http://localhost:8082")
-    //             .and()
-    //             .withClient("webadmin")
-    //             .authorizedGrantTypes("implicit")
-    //             .scopes("READ", "WRITE")
-    //             .redirectUris("http://aplicacao-cliente")
-    //             .and()
-    //             .withClient("checktoken")
-    //             .secret(passwordEncoder.encode("check123"));
-    // }
 
 }

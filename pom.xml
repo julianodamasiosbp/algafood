@@ -21,8 +21,10 @@
         <spring-fox.version>3.0.0</spring-fox.version>
         <logback-ext-loggly.version>0.1.5</logback-ext-loggly.version>
         <oauth2-oidc-sdk.version>10.4</oauth2-oidc-sdk.version>
-        <spring-security-oauth2.version>2.5.2.RELEASE</spring-security-oauth2.version>
-        <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
+        <!-- <spring-security-oauth2.version>2.5.2.RELEASE</spring-security-oauth2.version>
+        <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version> -->
+        <springdoc.version>1.6.9</springdoc.version>
+        <springauthserver.version>0.3.1</springauthserver.version>
     </properties>
     <dependencies>
         <dependency>
@@ -136,6 +138,28 @@
 
         <!-- Documentação -->
 
+        <dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>${springdoc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-hateoas</artifactId>
+			<version>${springdoc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-security</artifactId>
+			<version>${springdoc.version}</version>
+		</dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-authorization-server</artifactId>
+            <version>${springauthserver.version}</version>
+        </dependency>
+
 <!--         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-boot-starter</artifactId>
@@ -191,17 +215,17 @@
             <version>${oauth2-oidc-sdk.version}</version>
         </dependency>
 
-        <dependency>
+<!--         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-jwt</artifactId>
             <version>${spring-security-jwt.version}</version>
-        </dependency>
+        </dependency> -->
 
-        <dependency>
+<!--         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
             <version>${spring-security-oauth2.version}</version>
-        </dependency>
+        </dependency> -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
